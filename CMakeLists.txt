@@ -20,6 +20,12 @@ add_executable(arcade
 
 TARGET_LINK_LIBRARIES(arcade dl)
 
+add_subdirectory(librairies/template)
+add_dependencies(arcade template)
+
+set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "lib")
+set_target_properties(template PROPERTIES PREFIX "")
+
 add_custom_command(TARGET arcade POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:arcade>
         ${PROJECT_SOURCE_DIR}/$<TARGET_FILE_NAME:arcade>)
