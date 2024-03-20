@@ -20,8 +20,8 @@ add_executable(arcade
 
 TARGET_LINK_LIBRARIES(arcade dl)
 
-add_subdirectory(librairies/template)
-add_dependencies(arcade template)
+#add_subdirectory(librairies/template)
+#add_dependencies(arcade template)
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "lib")
 set_target_properties(template PROPERTIES PREFIX "")
