@@ -30,12 +30,6 @@ namespace Arcade {
 
     public:
         /**
-         * @brief Construct a new IGame object
-         *
-         */
-        IGame() = default;
-
-        /**
          * @brief Destroy the IGame object
          *
          */

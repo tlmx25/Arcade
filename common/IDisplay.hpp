@@ -30,12 +30,6 @@ namespace Arcade {
 
     public:
         /**
-         * @brief Construct a new IDisplay object
-         *
-         */
-        IDisplay() = default;
-
-        /**
          * @brief Destroy the IDisplay object
          *
          */
