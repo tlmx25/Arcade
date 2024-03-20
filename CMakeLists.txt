@@ -6,9 +6,16 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -g")
 
 include_directories(core)
+include_directories(common)
 
 add_executable(arcade
-        core/main.cpp)
+        core/main.cpp
+        common/Event.hpp
+        common/Color.hpp
+        common/Object.hpp
+        common/IDisplay.hpp
+        common/IDisplay.hpp
+        common/IGame.hpp)
 
 add_custom_command(TARGET arcade POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:arcade>
