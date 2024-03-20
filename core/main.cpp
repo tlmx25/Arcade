@@ -9,6 +9,6 @@
 
 int main()
 {
-    std::cout << "ok dev" << std::endl;
+    std::cout << "ok " << std::endl;
     return 0;
 }
