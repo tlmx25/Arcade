@@ -15,7 +15,7 @@ include_directories(${PROJECT_SOURCE_DIR}/common) # global include
 
 #add_executable(${LIB_NAME} main.cpp)
 add_library(${LIB_NAME} SHARED main.cpp)
-
+set_target_properties(${LIB_NAME} PROPERTIES PREFIX "")
 
 add_custom_command(TARGET ${LIB_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:${LIB_NAME}>
