@@ -8,6 +8,7 @@ SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -g")
 include_directories(core)
 include_directories(common)
 
+
 add_executable(arcade
         core/main.cpp
         common/Event.hpp
@@ -16,6 +17,8 @@ add_executable(arcade
         common/IDisplay.hpp
         common/IDisplay.hpp
         common/IGame.hpp)
+
+TARGET_LINK_LIBRARIES(arcade dl)
 
 add_custom_command(TARGET arcade POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:arcade>
