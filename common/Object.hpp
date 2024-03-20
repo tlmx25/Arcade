@@ -53,6 +53,18 @@ namespace Arcade {
         class Position {
         public:
             /**
+             * @brief Construct a new Position object with x and y coordinates set to 0.
+             *
+             * @return A new Position object with x and y coordinates set to 0.
+             */
+            Position& operator=(const Position &pos) {
+                if (this != &pos) {
+                    x = pos.x;
+                    y = pos.y;
+                }
+                return *this;
+            }
+            /**
              * @brief Construct a new Position object with given x and y coordinates.
              *
              * @param x The x coordinate of the position.
