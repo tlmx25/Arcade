@@ -10,7 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "IDisplay.hpp"
-#include "Object.hpp"
+#define OBJECT_SIZE 40
 
 /**
  * @file sfml.hpp
@@ -27,67 +27,20 @@ namespace Arcade {
     class sfml : public IDisplay {
 
     public:
-        /**
-         * @brief Construct a new sfml object
-         *
-         */
         sfml();
-
-        /**
-         * @brief Destroy the sfml object
-         *
-         */
-        ~sfml() override;
-
-        /**
-         * @brief Clear the window
-         */
+        ~sfml();
         void clearWindow() override;
-
-        /**
-         * @brief Draw the object
-         *
-         * @param object
-         */
+        void updateWindow() override;
         void draw(std::shared_ptr<Arcade::Object> object) override;
-
-        /**
-         * @brief Get the input
-         *
-         * @return Event
-         */
         Arcade::Event getInput() override;
+        int playTurn() override;
+
     private:
         sf::RenderWindow _window;
         sf::Clock _clock;
-
-        /**
-         * @brief Get the color
-         *
-         * @param color
-         * @return sf::Color
-         */
         sf::Color _getColor(Arcade::Color color);
-
-        /**
-         * @brief Draw a circle
-         * 
-         * @param object
-         */
         void _drawCircle(std::shared_ptr<Arcade::Object> object);
-
-        /**
-         * @brief Draw a rectangle
-         * 
-         * @param object
-         */
         void _drawRectangle(std::shared_ptr<Arcade::Object> object);
-
-        /**
-         * @brief Draw a text
-         * 
-         * @param object
-         */
         void _drawText(std::shared_ptr<Arcade::Object> object);
     };
 }
