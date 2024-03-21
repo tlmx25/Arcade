@@ -16,7 +16,10 @@ add_executable(arcade
         common/Object.hpp
         common/IDisplay.hpp
         common/IDisplay.hpp
-        common/IGame.hpp)
+        common/IGame.hpp
+        core/Core.cpp
+        core/Core.hpp
+        core/CLibEncapsulation.cpp)
 
 TARGET_LINK_LIBRARIES(arcade dl)
 
