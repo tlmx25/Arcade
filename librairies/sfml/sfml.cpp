@@ -90,11 +90,12 @@ Arcade::Event Arcade::sfml::getInput()
                 return Arcade::Event::GAME_RESTART;
             if (event.key.code == sf::Keyboard::F8)
                 return Arcade::Event::MENU;
+            if (event.key.code == sf::Keyboard::F10)
+                return Arcade::Event::REFRESH;
             if (event.key.code == sf::Keyboard::Enter)
                 return Arcade::Event::ENTER;
             if (event.key.code == sf::Keyboard::BackSpace)
                 return Arcade::Event::BACKSPACE;
-            // pas de refresh ??
         }
     }
     return Arcade::Event::NONE;
