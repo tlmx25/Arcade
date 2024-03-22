@@ -102,11 +102,11 @@ void Arcade::sfml::updateWindow()
 void Arcade::sfml::draw(std::shared_ptr<Arcade::Object> object)
 {
     if (object->getType() == Arcade::Type::Circle)
-        _drawCircle(object);
+        drawCircle(object);
     else if (object->getType() == Arcade::Type::Rectangle)
-        _drawRectangle(object);
+        drawRectangle(object);
     else if (object->getType() == Arcade::Type::Text)
-        _drawText(object);
+        drawText(object);
 }
 
 /**
@@ -181,7 +181,7 @@ sf::Color Arcade::sfml::_getColor(Arcade::Color color)
  *
  * @param object
 */
-void Arcade::sfml::_drawCircle(std::shared_ptr<Arcade::Object> object)
+void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
 {
     sf::CircleShape circle(OBJECT_SIZE / 2);
 
@@ -195,7 +195,7 @@ void Arcade::sfml::_drawCircle(std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-void Arcade::sfml::_drawRectangle(std::shared_ptr<Arcade::Object> object)
+void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
 {
     sf::RectangleShape rectangle(sf::Vector2f(OBJECT_SIZE, OBJECT_SIZE));
 
@@ -209,7 +209,7 @@ void Arcade::sfml::_drawRectangle(std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-void Arcade::sfml::_drawText(std::shared_ptr<Arcade::Object> object)
+void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
 {
     sf::Text text;
     sf::Font font;
