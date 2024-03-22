@@ -22,20 +22,20 @@ namespace Arcade {
      * It includes all the events that can be triggered by the user.
      */
     enum Event {
-        GAME_UP,
-        GAME_DOWN,
-        GAME_LEFT,
-        GAME_RIGHT,
-        ESCAPE,
-        SPACE,
-        GAME_RESTART,
-        ENTER,
-        BACKSPACE,
-        PREV_GAME,
-        NEXT_GAME,
-        PREV_LIB,
-        NEXT_LIB,
-        MENU,
+        GAME_UP, ///< Represents the 'UP' key
+        GAME_DOWN, ///< Represents the 'DOWN' key
+        GAME_LEFT, ///< Represents the 'LEFT' key
+        GAME_RIGHT, ///< Represents the 'RIGHT' key
+        ESCAPE, ///< Represents the 'ESCAPE' key
+        SPACE, ///< Represents the 'SPACE' key
+        GAME_RESTART, ///< Represents the 'RESTART' key
+        ENTER, ///< Represents the 'ENTER' key
+        BACKSPACE, ///< Represents the 'BACKSPACE' key
+        PREV_GAME, ///< Represents the 'PREV_GAME' key
+        NEXT_GAME, ///< Represents the 'NEXT_GAME' key
+        PREV_LIB, ///< Represents the 'PREV_LIB' key
+        NEXT_LIB, ///< Represents the 'NEXT_LIB' key
+        MENU, ///< Represents the 'MENU' key
         GAME_SHOOT,
         REFRESH,
         NONE,
