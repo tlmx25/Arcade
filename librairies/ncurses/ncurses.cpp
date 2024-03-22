@@ -55,11 +55,11 @@ void Arcade::ncurses::updateWindow()
 void Arcade::ncurses::draw(std::shared_ptr<Arcade::Object> object)
 {
     if (object->getType() == Arcade::Type::Circle)
-        _drawCircle(object);
+        drawCircle(object);
     else if (object->getType() == Arcade::Type::Rectangle)
-        _drawRectangle(object);
+        drawRectangle(object);
     else if (object->getType() == Arcade::Type::Text)
-        _drawText(object);
+        drawText(object);
 }
 
 /**
@@ -158,7 +158,7 @@ int Arcade::ncurses::_getColor(Arcade::Color color)
  *
  * @param object
 */
-void Arcade::ncurses::_drawCircle(std::shared_ptr<Arcade::Object> object)
+void Arcade::ncurses::drawCircle(const std::shared_ptr<Arcade::Object> object)
 {
     int color = _getColor(object->getColor());
     int x = object->getPosition().getX();
@@ -179,7 +179,7 @@ void Arcade::ncurses::_drawCircle(std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-void Arcade::ncurses::_drawRectangle(std::shared_ptr<Arcade::Object> object)
+void Arcade::ncurses::drawRectangle(const std::shared_ptr<Arcade::Object> object)
 {
     int color = _getColor(object->getColor());
     int x = object->getPosition().getX();
@@ -201,7 +201,7 @@ void Arcade::ncurses::_drawRectangle(std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-void Arcade::ncurses::_drawText(std::shared_ptr<Arcade::Object> object)
+void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
 {
     int color = _getColor(object->getColor());
     int x = object->getPosition().getX();

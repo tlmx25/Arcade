@@ -40,8 +40,8 @@ namespace Arcade {
         clock_t _clock;
         void define_pair_colors();
         int _getColor(Arcade::Color color);
-        void _drawCircle(std::shared_ptr<Arcade::Object> object);
-        void _drawRectangle(std::shared_ptr<Arcade::Object> object);
-        void _drawText(std::shared_ptr<Arcade::Object> object);
+        void drawCircle(const std::shared_ptr<Arcade::Object> object) override;
+        void drawRectangle(const std::shared_ptr<Arcade::Object> object) override;
+        void drawText(const std::shared_ptr<Arcade::Object> object) override;
     };
 }
