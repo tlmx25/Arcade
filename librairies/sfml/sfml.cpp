@@ -143,7 +143,6 @@ int Arcade::sfml::playTurn()
         _clock.restart();
         return static_cast<int>(seconds);
     }
-    _clock.restart();
     return 0;
 }
 
