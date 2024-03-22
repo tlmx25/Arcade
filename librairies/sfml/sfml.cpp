@@ -171,9 +171,8 @@ sf::Color Arcade::sfml::_getColor(Arcade::Color color)
         return sf::Color(128, 128, 128);
     if (color == Arcade::Color::PURPLE)
         return sf::Color::Magenta;
-    // TODO
-    // if (color == Arcade::Color::UNKNOWN)
-    //     return sf::Color::Black;
+    if (color == Arcade::Color::UNKNOWN)
+        return sf::Color::Black;
     return sf::Color::Black;
 }
 
@@ -219,7 +218,7 @@ void Arcade::sfml::_drawText(std::shared_ptr<Arcade::Object> object)
         return;
     text.setFont(font);
     text.setString(object->getAsset());
-    // TODO
+    // TODO: tests ??
     // text.setCharacterSize(OBJECT_SIZE);
     text.setFillColor(_getColor(object->getColor()));
     text.setPosition(object->getPosition().getX(), object->getPosition().getY());
