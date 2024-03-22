@@ -39,8 +39,11 @@ private:
     std::string _currentGame; ///< The current game.
     std::vector<std::string> _libs; ///< The available graphic libraries.
     std::vector<std::string> _games; ///< The available games.
-    bool _isRunning = false; ///< A boolean to know if the core is running.
+    bool _isInMenu = true; ///< A boolean to know if the core is in the menu.
+    bool _isRunning = false; ///< A boolean to know if the core is running.*
+    std::string _username; ///< The username of the player.
     void manageEvent(Arcade::Event event);
+    std::vector<std::shared_ptr<Arcade::Object>> menu();
     void refreshLibs();
     void loadAllLibs();
 

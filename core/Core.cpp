@@ -22,10 +22,8 @@ Core::Core(std::string defaultLib)
         throw InvalidStartLibException("Invalid library type");
     _display = std::shared_ptr<Arcade::IDisplay>(lib.getElement<Arcade::IDisplay *>("entryPointDisplay"));
 
-    lib.openLib("lib/menu.so");
-    _currentGame = "lib/menu.so";
-    _game = std::shared_ptr<Arcade::IGame>(lib.getElement<Arcade::IGame *>("entryPointGame"));
-
+    _currentGame = "";
+    _game = nullptr;
 }
 
 /**
@@ -107,4 +105,22 @@ void Core::refreshLibs()
     _libs.clear();
     _games.clear();
     loadAllLibs();
+}
+
+/**
+ * @brief logic for menu
+ *
+ * @return std::vector<std::shared_ptr<Arcade::Object>> The menu element.
+ */
+std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
+{
+    std::vector<std::shared_ptr<Arcade::Object>> objects;
+    Arcade::Event event;
+
+    while (_isInMenu) {
+        _display->updateWindow();
+        event = _display->getInput();
+        manageEvent(event);
+    }
+    return objects;
 }
