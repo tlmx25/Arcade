@@ -20,6 +20,7 @@ Arcade::ncurses::ncurses()
     define_pair_colors();
     curs_set(0);
     refresh();
+    _clock = clock();
 }
 
 /**
@@ -111,8 +112,7 @@ Arcade::Event Arcade::ncurses::getInput()
 */
 int Arcade::ncurses::playTurn()
 {
-    // TODO: Implement this method
-    return 0;
+    // TODO
 }
 
 /**
@@ -128,4 +128,87 @@ void Arcade::ncurses::define_pair_colors()
     init_pair(6, COLOR_BLACK, COLOR_MAGENTA);
     init_pair(7, COLOR_RED, COLOR_BLACK);
     // TODO: Add more colors
+}
+
+/**
+ * @brief Get the color
+ *
+ * @param color
+ * @return int
+*/
+int Arcade::ncurses::_getColor(Arcade::Color color)
+{
+    if (color == Arcade::Color::RED)
+        return 2;
+    if (color == Arcade::Color::GREEN)
+        return 3;
+    if (color == Arcade::Color::BLUE)
+        return 5;
+    if (color == Arcade::Color::YELLOW)
+        return 4;
+    if (color == Arcade::Color::WHITE)
+        return 1;
+    if (color == Arcade::Color::BLACK)
+        return 0;
+    return 0;
+}
+
+/**
+ * @brief Draw a circle
+ *
+ * @param object
+*/
+void Arcade::ncurses::_drawCircle(std::shared_ptr<Arcade::Object> object)
+{
+    int color = _getColor(object->getColor());
+    int x = object->getPosition().getX();
+    int y = object->getPosition().getY();
+    int radius = OBJECT_SIZE / 2;
+
+    attron(COLOR_PAIR(color));
+    for (int i = 0; i < 360; i++) {
+        int x1 = x + radius * cos(i * M_PI / 180);
+        int y1 = y + radius * sin(i * M_PI / 180);
+        mvprintw(y1, x1, " ");
+    }
+    attroff(COLOR_PAIR(color));
+}
+
+/**
+ * @brief Draw a rectangle
+ *
+ * @param object
+*/
+void Arcade::ncurses::_drawRectangle(std::shared_ptr<Arcade::Object> object)
+{
+    int color = _getColor(object->getColor());
+    int x = object->getPosition().getX();
+    int y = object->getPosition().getY();
+    int width = OBJECT_SIZE;
+    int height = OBJECT_SIZE;
+
+    attron(COLOR_PAIR(color));
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+            mvprintw(y + j, x + i, " ");
+        }
+    }
+    attroff(COLOR_PAIR(color));
+}
+
+/**
+ * @brief Draw a text
+ *
+ * @param object
+*/
+void Arcade::ncurses::_drawText(std::shared_ptr<Arcade::Object> object)
+{
+    int color = _getColor(object->getColor());
+    int x = object->getPosition().getX();
+    int y = object->getPosition().getY();
+    std::string text = object->getAsset();
+
+    attron(COLOR_PAIR(color));
+    mvprintw(y, x, text.c_str());
+    attroff(COLOR_PAIR(color));
 }

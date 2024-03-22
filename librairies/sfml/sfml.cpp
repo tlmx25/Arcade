@@ -12,6 +12,7 @@
 */
 Arcade::sfml::sfml() : _window(sf::VideoMode(1920, 1080), "Arcade")
 {
+    _clock = sf::Clock();
 }
 
 /**
@@ -108,7 +109,14 @@ Arcade::Event Arcade::sfml::getInput()
 */
 int Arcade::sfml::playTurn()
 {
-    // TODO: Implement this function
+    sf::Time time = _clock.getElapsedTime();
+    float seconds = time.asSeconds();
+
+    if (seconds >= 1.0f) {
+        _clock.restart();
+        return static_cast<int>(seconds);
+    }
+    _clock.restart();
     return 0;
 }
 

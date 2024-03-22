@@ -10,6 +10,7 @@
 #include <ncurses.h>
 #include "IDisplay.hpp"
 #include <time.h>
+#include <math.h>
 #define OBJECT_SIZE 40
 
 /**
