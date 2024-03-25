@@ -26,6 +26,14 @@ int main(int ac, char **av)
         print_help();
         return 0;
     }
+//    CLibEncapsulation lib(reinterpret_cast<std::string &>(av[1]));
+//    if (!lib.isDisplayLib())
+//        std::cout << "not display" << std::endl;
+//     Arcade::IDisplay *display = lib.getElement<Arcade::IDisplay *>("entryPointDisplay");
+//     if (display == nullptr)
+//         return 84;
+//     display->playTurn();
+//    return 0;
     try {
         Core core(av[1]);
         core.mainLoop();

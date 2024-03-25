@@ -76,6 +76,7 @@ Arcade::sfml::sfml() : _window(sf::VideoMode(1920, 1080), "Arcade")
 Arcade::sfml::~sfml()
 {
     _window.close();
+    std::cout << "Window closed" << std::endl;
 }
 
 /**
@@ -102,11 +103,11 @@ void Arcade::sfml::updateWindow()
 void Arcade::sfml::draw(std::shared_ptr<Arcade::Object> object)
 {
     if (object->getType() == Arcade::Type::Circle)
-        _drawCircle(object);
+        drawCircle(object);
     else if (object->getType() == Arcade::Type::Rectangle)
-        _drawRectangle(object);
+        drawRectangle(object);
     else if (object->getType() == Arcade::Type::Text)
-        _drawText(object);
+        drawText(object);
 }
 
 /**
@@ -139,11 +140,10 @@ int Arcade::sfml::playTurn()
     sf::Time time = _clock.getElapsedTime();
     float seconds = time.asSeconds();
 
-    if (seconds >= 1.0f) {
+    if (seconds >= 0.3f) {
         _clock.restart();
-        return static_cast<int>(seconds);
+        return static_cast<int>(seconds / 0.3f);
     }
-    _clock.restart();
     return 0;
 }
 
@@ -181,7 +181,7 @@ sf::Color Arcade::sfml::_getColor(Arcade::Color color)
  *
  * @param object
 */
-void Arcade::sfml::_drawCircle(std::shared_ptr<Arcade::Object> object)
+void Arcade::sfml::drawCircle(std::shared_ptr<Arcade::Object> object)
 {
     sf::CircleShape circle(OBJECT_SIZE / 2);
 
@@ -195,7 +195,7 @@ void Arcade::sfml::_drawCircle(std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-void Arcade::sfml::_drawRectangle(std::shared_ptr<Arcade::Object> object)
+void Arcade::sfml::drawRectangle(std::shared_ptr<Arcade::Object> object)
 {
     sf::RectangleShape rectangle(sf::Vector2f(OBJECT_SIZE, OBJECT_SIZE));
 
@@ -209,12 +209,12 @@ void Arcade::sfml::_drawRectangle(std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-void Arcade::sfml::_drawText(std::shared_ptr<Arcade::Object> object)
+void Arcade::sfml::drawText(std::shared_ptr<Arcade::Object> object)
 {
     sf::Text text;
     sf::Font font;
 
-    if (!font.loadFromFile("../assets/arial.ttf"))
+    if (!font.loadFromFile("librairies/assets/arial.ttf"))
         return;
     text.setFont(font);
     text.setString(object->getAsset());
@@ -223,4 +223,9 @@ void Arcade::sfml::_drawText(std::shared_ptr<Arcade::Object> object)
     text.setFillColor(_getColor(object->getColor()));
     text.setPosition(object->getPosition().getX(), object->getPosition().getY());
     _window.draw(text);
+}
+
+extern "C" Arcade::sfml *entryPointDisplay()
+{
+    return (new Arcade::sfml());
 }

@@ -46,6 +46,7 @@ private:
     std::vector<std::shared_ptr<Arcade::Object>> menu();
     void refreshLibs();
     void loadAllLibs();
+    std::string getLibName(std::string const &path);
 
     public:
         /**

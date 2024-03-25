@@ -29,7 +29,7 @@ namespace Arcade {
 
     public:
         sfml();
-        ~sfml();
+        ~sfml() override;
         void clearWindow() override;
         void updateWindow() override;
         void draw(std::shared_ptr<Arcade::Object> object) override;
@@ -40,8 +40,10 @@ namespace Arcade {
         sf::RenderWindow _window;
         sf::Clock _clock;
         sf::Color _getColor(Arcade::Color color);
-        void _drawCircle(std::shared_ptr<Arcade::Object> object);
-        void _drawRectangle(std::shared_ptr<Arcade::Object> object);
-        void _drawText(std::shared_ptr<Arcade::Object> object);
+        void drawCircle(std::shared_ptr<Arcade::Object> object) override;
+        void drawRectangle(std::shared_ptr<Arcade::Object> object) override;
+        void drawText(std::shared_ptr<Arcade::Object> object) override;
     };
 }
+
+extern "C" Arcade::sfml * entryPointDisplay();

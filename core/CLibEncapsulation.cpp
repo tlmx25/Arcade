@@ -41,7 +41,7 @@ void CLibEncapsulation::openLib(std::string const libPath)
 {
     if (this->isLibOpen)
         this->closeLib();
-    this->lib = dlopen(libPath.c_str(), RTLD_LAZY);
+    this->lib = dlopen(libPath.c_str(), RTLD_NOW | RTLD_NODELETE);
     if (!this->lib)
         throw LibException(dlerror());
     this->isLibOpen = true;
