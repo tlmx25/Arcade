@@ -11,17 +11,13 @@ include_directories(common)
 
 add_executable(arcade
         core/main.cpp
-        common/Event.hpp
-        common/Color.hpp
-        common/Object.hpp
-        common/IDisplay.hpp
-        common/IDisplay.hpp
-        common/IGame.hpp)
+        core/Core.cpp
+        core/Core.hpp
+        core/CLibEncapsulation.cpp)
 
 TARGET_LINK_LIBRARIES(arcade dl)
 
 add_subdirectory(librairies/sfml)
-#add_dependencies(arcade template)
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "lib")
 

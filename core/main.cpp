@@ -6,9 +6,47 @@
 */
 
 #include <iostream>
+#include "Core.hpp"
 
-int main()
+void print_help()
 {
-    std::cout << "ok " << std::endl;
+    std::cout << "USAGE" << std::endl;
+    std::cout << "\t./arcade path_to_graphical_library" << std::endl;
+    std::cout << "DESCRIPTION" << std::endl;
+    std::cout << "\tpath_to_graphical_library\tThe path to the graphical library you want to use" << std::endl;
+}
+
+int main(int ac, char **av)
+{
+    if (ac != 2) {
+        print_help();
+        return 84;
+    }
+    if (std::string(av[1]) == "-h") {
+        print_help();
+        return 0;
+    }
+//    CLibEncapsulation lib(reinterpret_cast<std::string &>(av[1]));
+//    if (!lib.isDisplayLib())
+//        std::cout << "not display" << std::endl;
+//     Arcade::IDisplay *display = lib.getElement<Arcade::IDisplay *>("entryPointDisplay");
+//     if (display == nullptr)
+//         return 84;
+//     display->playTurn();
+//    return 0;
+    try {
+        Core core(av[1]);
+        core.mainLoop();
+    } catch (Core::InvalidStartLibException &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    } catch (CLibEncapsulation::LibException &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
+    catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
     return 0;
 }
