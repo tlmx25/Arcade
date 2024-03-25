@@ -213,7 +213,6 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-*
 void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
 {
     sf::Text text;
