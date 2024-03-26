@@ -31,3 +31,8 @@
 *.out
 *.app
 arcade
+.idea/
+.vscode/
+lib/
+build/
+cmake-build-debug/
