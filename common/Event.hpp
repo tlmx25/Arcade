@@ -37,43 +37,10 @@ namespace Arcade {
         NEXT_LIB, ///< Represents the 'NEXT_LIB' key
         MENU, ///< Represents the 'MENU' key
         GAME_SHOOT,
-        REFRESH, ///< Represents the 'REFRESH' key
-        NONE, ///< Represents no key
-        IN_1, ///< Represents the '1' key
-        IN_2, ///< Represents the '2' key
-        IN_3, ///< Represents the '3' key
-        IN_4, ///< Represents the '4' key
-        IN_5, ///< Represents the '5' key
-        IN_6, ///< Represents the '6' key
-        IN_7, ///< Represents the '7' key
-        IN_8, ///< Represents the '8' key
-        IN_9, ///< Represents the '9' key
-        IN_0, ///< Represents the '0' key
-        IN_A, ///< Represents the 'A' key
-        IN_B, ///< Represents the 'B' key
-        IN_C, ///< Represents the 'C' key
-        IN_D, ///< Represents the 'D' key
-        IN_E, ///< Represents the 'E' key
-        IN_F, ///< Represents the 'F' key
-        IN_G, ///< Represents the 'G' key
-        IN_H, ///< Represents the 'H' key
-        IN_I, ///< Represents the 'I' key
-        IN_J, ///< Represents the 'J' key
-        IN_K, ///< Represents the 'K' key
-        IN_L, ///< Represents the 'L' key
-        IN_M, ///< Represents the 'M' key
-        IN_N, ///< Represents the 'N' key
-        IN_O, ///< Represents the 'O' key
-        IN_P, ///< Represents the 'P' key
-        IN_Q, ///< Represents the 'Q' key
-        IN_R, ///< Represents the 'R' key
-        IN_S, ///< Represents the 'S' key
-        IN_T, ///< Represents the 'T' key
-        IN_U, ///< Represents the 'U' key
-        IN_V, ///< Represents the 'V' key
-        IN_W, ///< Represents the 'W' key
-        IN_X, ///< Represents the 'X' key
-        IN_Y, ///< Represents the 'Y' key
-        IN_Z, ///< Represents the 'Z' key
+        REFRESH,
+        NONE,
+
+        IN_A, IN_B, IN_C, IN_D, IN_E, IN_F, IN_G, IN_H, IN_I, IN_J, IN_K, IN_L, IN_M, IN_N, IN_O, IN_P, IN_Q, IN_R, IN_S, IN_T, IN_U, IN_V, IN_W, IN_X, IN_Y, IN_Z,
+        IN_0, IN_1, IN_2, IN_3, IN_4, IN_5, IN_6, IN_7, IN_8, IN_9
     };
 }

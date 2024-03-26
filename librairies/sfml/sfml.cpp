@@ -122,7 +122,7 @@ Arcade::Event Arcade::sfml::getInput()
         if (event.type == sf::Event::Closed)
             return Arcade::Event::ESCAPE;
         for (auto key : keyEvents) {
-            if (sf::Keyboard::isKeyPressed(key.first))
+            if (sf::Event::KeyPressed == event.type && sf::Keyboard::isKeyPressed(key.first))
                 return key.second;
         }
     }
@@ -139,9 +139,9 @@ int Arcade::sfml::playTurn()
     sf::Time time = _clock.getElapsedTime();
     float seconds = time.asSeconds();
 
-    if (seconds >= 1.0f) {
+    if (seconds >= 0.3f) {
         _clock.restart();
-        return static_cast<int>(seconds);
+        return static_cast<int>(seconds / 0.3f);
     }
     return 0;
 }
@@ -180,7 +180,9 @@ sf::Color Arcade::sfml::_getColor(Arcade::Color color)
  *
  * @param object
 */
+
 void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
+
 {
     sf::CircleShape circle(OBJECT_SIZE / 2);
 
@@ -194,7 +196,9 @@ void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
+
 void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
+
 {
     sf::RectangleShape rectangle(sf::Vector2f(OBJECT_SIZE, OBJECT_SIZE));
 
@@ -213,7 +217,7 @@ void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
     sf::Text text;
     sf::Font font;
 
-    if (!font.loadFromFile("../assets/arial.ttf"))
+    if (!font.loadFromFile("librairies/assets/arial.ttf"))
         return;
     text.setFont(font);
     text.setString(object->getAsset());
@@ -222,4 +226,9 @@ void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
     text.setFillColor(_getColor(object->getColor()));
     text.setPosition(object->getPosition().getX(), object->getPosition().getY());
     _window.draw(text);
+}
+
+extern "C" Arcade::sfml *entryPointDisplay()
+{
+    return (new Arcade::sfml());
 }

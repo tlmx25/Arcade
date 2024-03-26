@@ -15,7 +15,9 @@ include_directories(${PROJECT_SOURCE_DIR}/common) # global include
 
 #add_executable(${LIB_NAME} main.cpp)
 add_library(${LIB_NAME} SHARED sfml.cpp)
-target_link_libraries(sfml sfml-graphics sfml-window sfml-system)
+
+target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(${LIB_NAME} sfml-graphics sfml-window sfml-system)
 set_target_properties(${LIB_NAME} PROPERTIES PREFIX "")
 
 add_custom_command(TARGET ${LIB_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
