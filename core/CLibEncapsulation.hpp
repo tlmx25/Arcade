@@ -30,19 +30,20 @@ class CLibEncapsulation {
          */
         template<class T>
         T getElement(std::string const elementName) {
-            void *(*element)() = (void * (*)())dlsym(this->lib, elementName.c_str());
+            if (!this->isLibOpen) {
+                this->setError("Library is not open");
+                return nullptr;
+            }
+            T (*element)() = (T(*)()) getFunction(elementName);
             if (!element) {
                 this->setError(dlerror());
                 return nullptr;
             }
-            std::cout << "2" << std::endl;
             T elementPtr = (T)element();
-            std::cout << "3" << std::endl;
             if (!elementPtr) {
                 this->setError(dlerror());
                 return nullptr;
             }
-            std::cout << "sortie de getElement" << std::endl;
             return elementPtr;
         }
         std::string getError();
