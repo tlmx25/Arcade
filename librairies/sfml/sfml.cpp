@@ -76,7 +76,6 @@ Arcade::sfml::sfml() : _window(sf::VideoMode(1920, 1080), "Arcade")
 Arcade::sfml::~sfml()
 {
     _window.close();
-    std::cout << "Window closed" << std::endl;
 }
 
 /**
@@ -123,7 +122,7 @@ Arcade::Event Arcade::sfml::getInput()
         if (event.type == sf::Event::Closed)
             return Arcade::Event::ESCAPE;
         for (auto key : keyEvents) {
-            if (sf::Keyboard::isKeyPressed(key.first))
+            if (sf::Event::KeyPressed == event.type && sf::Keyboard::isKeyPressed(key.first))
                 return key.second;
         }
     }
