@@ -70,7 +70,7 @@ void Core::mainLoop()
  *
  * @param event The event to manage.
  */
-void Core::manageEvent(Arcade::Event event)
+void Core::manageEvent(Arcade::Event &event)
 {
     if (event == Arcade::Event::ESCAPE)
         _isRunning = false;
@@ -88,6 +88,10 @@ void Core::manageEvent(Arcade::Event event)
         setDisplay(1);
     if (event == Arcade::Event::PREV_LIB)
         setDisplay(-1);
+    if (_isInMenu)
+        manageMenuEvent(event);
+    if (event > Arcade::Event::NONE)
+        event = Arcade::Event::NONE;
 }
 
 /**
@@ -113,6 +117,10 @@ void Core::loadAllLibs()
         else if (lib.isDisplayLib())
             _libsList.push_back(entry.path().string());
     }
+    if (!_gamesList.empty())
+        _selectedGame = _gamesList.front();
+    if (!_libsList.empty())
+        _selectedLib = _libsList.front();
 }
 
 /**
@@ -140,13 +148,13 @@ std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
     objects.push_back(std::make_shared<Arcade::Object>(30,60, Arcade::Type::Text, Arcade::Color::WHITE, "Games:"));
     int x = 180;
     for (auto &game : _gamesList) {
-        objects.push_back(std::make_shared<Arcade::Object>(x,60, Arcade::Type::Text, Arcade::Color::WHITE, getLibName(game)));
+        objects.push_back(std::make_shared<Arcade::Object>(x,60, Arcade::Type::Text, (game == _selectedGame) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(game)));
         x += 150;
     }
     objects.push_back(std::make_shared<Arcade::Object>(30,90, Arcade::Type::Text, Arcade::Color::WHITE, "Graphics:"));
     x = 180;
     for (auto &lib : _libsList) {
-        objects.push_back(std::make_shared<Arcade::Object>(x,90, Arcade::Type::Text, Arcade::Color::WHITE, getLibName(lib)));
+        objects.push_back(std::make_shared<Arcade::Object>(x,90, Arcade::Type::Text, (lib == _selectedLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
         x += 150;
     }
     objects.push_back(std::make_shared<Arcade::Object>(1500,120, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
@@ -330,4 +338,13 @@ void Core::manageUsername(Arcade::Event event)
             return;
         }
     }
+}
+
+/**
+** @brief Manage the menu event
+** @param event The event to manage.
+**/
+void Core::manageMenuEvent(Arcade::Event event)
+{
+//    if (event == Arcade)
 }
