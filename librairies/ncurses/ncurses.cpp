@@ -200,15 +200,15 @@ int Arcade::ncurses::_getColor(Arcade::Color color)
 void Arcade::ncurses::drawCircle(const std::shared_ptr<Arcade::Object> object)
 {
     int color = _getColor(object->getColor());
-    int x = object->getPosition().getX();
-    int y = object->getPosition().getY();
+    int x = object->getPosition().getX() * SQUARE_WIDTH;
+    int y = object->getPosition().getY() * SQUARE_HEIGHT;
     int radius = OBJECT_SIZE / 2;
 
     attron(COLOR_PAIR(color));
-    for (int i = 0; i < 360; i++) {
-        int x1 = x + radius * cos(i * M_PI / 180);
-        int y1 = y + radius * sin(i * M_PI / 180);
-        mvprintw(y1, x1, " ");
+    for (int i = 0; i < radius * SQUARE_WIDTH; i++) {
+        for (int j = 0; j < radius * SQUARE_HEIGHT; j++) {
+                mvprintw(y + j, x + i, " ");
+            }
     }
     attroff(COLOR_PAIR(color));
 }
@@ -221,14 +221,12 @@ void Arcade::ncurses::drawCircle(const std::shared_ptr<Arcade::Object> object)
 void Arcade::ncurses::drawRectangle(const std::shared_ptr<Arcade::Object> object)
 {
     int color = _getColor(object->getColor());
-    int x = object->getPosition().getX();
-    int y = object->getPosition().getY();
-    int width = OBJECT_SIZE;
-    int height = OBJECT_SIZE;
+    int x = object->getPosition().getX() * SQUARE_WIDTH;
+    int y = object->getPosition().getY() * SQUARE_HEIGHT;
 
     attron(COLOR_PAIR(color));
-    for (int i = 0; i < width; i++) {
-        for (int j = 0; j < height; j++) {
+    for (int i = 0; i < OBJECT_SIZE / 2 * SQUARE_WIDTH; i++) {
+        for (int j = 0; j < OBJECT_SIZE / 2 * SQUARE_HEIGHT; j++) {
             mvprintw(y + j, x + i, " ");
         }
     }
@@ -243,9 +241,9 @@ void Arcade::ncurses::drawRectangle(const std::shared_ptr<Arcade::Object> object
 void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
 {
     int color = _getColor(object->getColor());
-    int x = object->getPosition().getX();
-    int y = object->getPosition().getY();
-    std::string text = object->getAsset();
+    int x = object->getPosition().getX() * SQUARE_WIDTH;
+    int y = object->getPosition().getY() * SQUARE_HEIGHT;
+    std::string text = object->getAsset();  
 
     attron(COLOR_PAIR(color));
     mvprintw(y, x, "%s", text.c_str());

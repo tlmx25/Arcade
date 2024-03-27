@@ -187,7 +187,7 @@ void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
     sf::CircleShape circle(OBJECT_SIZE / 2);
 
     circle.setFillColor(_getColor(object->getColor()));
-    circle.setPosition(object->getPosition().getX(), object->getPosition().getY());
+    circle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
     _window.draw(circle);
 }
 
@@ -203,7 +203,7 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
     sf::RectangleShape rectangle(sf::Vector2f(OBJECT_SIZE, OBJECT_SIZE));
 
     rectangle.setFillColor(_getColor(object->getColor()));
-    rectangle.setPosition(object->getPosition().getX(), object->getPosition().getY());
+    rectangle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
     _window.draw(rectangle);
 }
 
@@ -222,10 +222,8 @@ void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
         return;
     text.setFont(font);
     text.setString(object->getAsset());
-    // TODO: tests ??
-    // text.setCharacterSize(OBJECT_SIZE);
     text.setFillColor(_getColor(object->getColor()));
-    text.setPosition(object->getPosition().getX(), object->getPosition().getY());
+    text.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
     _window.draw(text);
 }
 
