@@ -13,6 +13,8 @@
 #include <cmath>
 #include <vector>
 #define OBJECT_SIZE 40
+#define SQUARE_WIDTH 4
+#define SQUARE_HEIGHT 2
 
 /**
  * @file ncurses.hpp
