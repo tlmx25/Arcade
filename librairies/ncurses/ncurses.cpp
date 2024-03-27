@@ -251,3 +251,8 @@ void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
     mvprintw(y, x, "%s", text.c_str());
     attroff(COLOR_PAIR(color));
 }
+
+extern "C" Arcade::ncurses *entryPointDisplay()
+{
+    return new Arcade::ncurses();
+}

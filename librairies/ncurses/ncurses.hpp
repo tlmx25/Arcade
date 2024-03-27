@@ -46,3 +46,5 @@ namespace Arcade {
         void drawText(const std::shared_ptr<Arcade::Object> object) override;
     };
 }
+
+extern "C" Arcade::ncurses * entryPointDisplay();
