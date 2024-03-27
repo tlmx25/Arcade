@@ -11,6 +11,7 @@
 #include "IDisplay.hpp"
 #include <time.h>
 #include <math.h>
+#include <vector>
 #define OBJECT_SIZE 40
 
 /**
