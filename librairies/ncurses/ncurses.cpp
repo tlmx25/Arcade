@@ -125,8 +125,7 @@ Arcade::Event Arcade::ncurses::getInput()
 {
     int ch = getch();
 
-    // TODO: test ?
-    // refresh();
+    refresh();
     for (auto &key : keyEvents) {
         if (ch == key.first)
             return key.second;
@@ -249,6 +248,6 @@ void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
     std::string text = object->getAsset();
 
     attron(COLOR_PAIR(color));
-    mvprintw(y, x, text.c_str());
+    mvprintw(y, x, "%s", text.c_str());
     attroff(COLOR_PAIR(color));
 }
