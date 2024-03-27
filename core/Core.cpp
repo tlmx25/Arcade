@@ -144,20 +144,20 @@ std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
 {
     std::vector<std::shared_ptr<Arcade::Object>> objects;
 
-    objects.push_back(std::make_shared<Arcade::Object>(30,30, Arcade::Type::Text, Arcade::Color::WHITE, "Arcade"));
-    objects.push_back(std::make_shared<Arcade::Object>(30,60, Arcade::Type::Text, Arcade::Color::WHITE, "Games:"));
-    int x = 180;
+    objects.push_back(std::make_shared<Arcade::Object>(1,1, Arcade::Type::Text, Arcade::Color::WHITE, "Arcade"));
+    objects.push_back(std::make_shared<Arcade::Object>(1,2, Arcade::Type::Text, Arcade::Color::WHITE, "Games:"));
+    int x = 5;
     for (auto &game : _gamesList) {
-        objects.push_back(std::make_shared<Arcade::Object>(x,60, Arcade::Type::Text, (game == _selectedGame) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(game)));
-        x += 150;
+        objects.push_back(std::make_shared<Arcade::Object>(x,2, Arcade::Type::Text, (game == _selectedGame) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(game)));
+        x += 5;
     }
-    objects.push_back(std::make_shared<Arcade::Object>(30,90, Arcade::Type::Text, Arcade::Color::WHITE, "Graphics:"));
-    x = 180;
+    objects.push_back(std::make_shared<Arcade::Object>(1,3, Arcade::Type::Text, Arcade::Color::WHITE, "Graphics:"));
+    x = 5;
     for (auto &lib : _libsList) {
-        objects.push_back(std::make_shared<Arcade::Object>(x,90, Arcade::Type::Text, (lib == _selectedLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
-        x += 150;
+        objects.push_back(std::make_shared<Arcade::Object>(x,3, Arcade::Type::Text, (lib == _selectedLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
+        x += 5;
     }
-    objects.push_back(std::make_shared<Arcade::Object>(1500,120, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
+    objects.push_back(std::make_shared<Arcade::Object>(37,2, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
     return objects;
 }
 
