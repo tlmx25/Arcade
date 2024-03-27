@@ -42,11 +42,14 @@ void Core::mainLoop()
 {
     std::vector<std::shared_ptr<Arcade::Object>> objects;
     Arcade::Event event;
+    Arcade::Event Lastevent;
     int nbTurn = 0;
 
     _isRunning = true;
     while (_isRunning) {
         event = _display->getInput();
+        if (event != Arcade::Event::NONE)
+            Lastevent = event;
         manageEvent(event);
         nbTurn = _display->playTurn();
         if (!nbTurn)
@@ -56,7 +59,7 @@ void Core::mainLoop()
             objects = menu();
         else {
             for (int i = 0; i < nbTurn; i++)
-                objects = _game->Turn(event);
+                objects = _game->Turn(Lastevent);
         }
         for (auto &object : objects) {
             _display->draw(object);
