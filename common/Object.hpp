@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include "Color.hpp"
+#define ASSET_PATH "librairies/assets/snake/"
 
 /**
 ** @file IObject.hpp
