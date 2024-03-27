@@ -9,8 +9,8 @@
 
 #include <ncurses.h>
 #include "IDisplay.hpp"
-#include <time.h>
-#include <math.h>
+#include <ctime>
+#include <cmath>
 #include <vector>
 #define OBJECT_SIZE 40
 
