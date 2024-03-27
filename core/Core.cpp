@@ -58,8 +58,10 @@ void Core::mainLoop()
         if (_isInMenu)
             objects = menu();
         else {
-            for (int i = 0; i < nbTurn; i++)
+            for (int i = 0; i < nbTurn; i++) {
                 objects = _game->Turn(Lastevent);
+                Lastevent = Arcade::Event::NONE;
+            }
         }
         for (auto &object : objects) {
             _display->draw(object);
