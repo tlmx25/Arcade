@@ -25,7 +25,7 @@ class snake : public Arcade::IGame {
         snake();
         ~snake() override;
         std::vector<std::shared_ptr<Arcade::Object>> Turn(Arcade::Event event) override;
-        void init() override;
+        void init() override {};
         int getScore() override;
     private:
         void createObects();

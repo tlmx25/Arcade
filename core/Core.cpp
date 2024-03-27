@@ -106,8 +106,10 @@ void Core::loadAllLibs()
         try {
             lib.openLib(entry.path().string());
         } catch (const CLibEncapsulation::LibException &e) {
+            std::cerr << e.what() << std::endl;
             continue;
         }
+        std::cout << "lib: " << entry.path().string() << " is game: " << lib.isGameLib() << "is lib : "<< lib.isDisplayLib()<<  std::endl;
         if (lib.isGameLib())
             _gamesList.push_back(entry.path().string());
         else if (lib.isDisplayLib())
@@ -175,6 +177,8 @@ std::string Core::getLibName(std::string const &path)
 std::string Core::getNextLib(std::string const &currentLib, std::vector<std::string> const &libs)
 {
     bool is_find = false;
+    if (currentLib.empty() && !libs.empty())
+        return libs.front();
     for (auto &lib : libs) {
         if (is_find)
             return lib;
@@ -198,6 +202,8 @@ std::string Core::getPreviousLib(std::string const &currentLib, std::vector<std:
     bool is_find = false;
     std::string prev;
 
+    if (currentLib.empty() && !libs.empty())
+        return libs.back();
     for (auto &lib : libs) {
         if (lib == currentLib) {
             if (is_find)
@@ -240,6 +246,7 @@ void Core::setGame(int PreviousOrNext)
     }
     _game = std::unique_ptr<Arcade::IGame>(game);
     _currentGame = newGame;
+    _isInMenu = false;
 }
 
 /**
