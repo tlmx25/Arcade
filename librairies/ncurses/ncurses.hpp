@@ -9,9 +9,12 @@
 
 #include <ncurses.h>
 #include "IDisplay.hpp"
-#include <time.h>
-#include <math.h>
+#include <ctime>
+#include <cmath>
+#include <vector>
 #define OBJECT_SIZE 40
+#define SQUARE_WIDTH 4
+#define SQUARE_HEIGHT 2
 
 /**
  * @file ncurses.hpp
@@ -45,3 +48,5 @@ namespace Arcade {
         void drawText(const std::shared_ptr<Arcade::Object> object) override;
     };
 }
+
+extern "C" Arcade::ncurses * entryPointDisplay();

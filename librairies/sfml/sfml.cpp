@@ -187,7 +187,7 @@ void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
     sf::CircleShape circle(OBJECT_SIZE / 2);
     sf::Texture texture;
 
-    circle.setPosition(object->getPosition().getX(), object->getPosition().getY());
+    circle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
     if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
         circle.setTexture(&texture);
     else
@@ -196,6 +196,7 @@ void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
 }
 
 /**
+
  * @brief Draw a rectangle
  *
  * @param object
@@ -207,7 +208,7 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
     sf::RectangleShape rectangle(sf::Vector2f(OBJECT_SIZE, OBJECT_SIZE));
     sf::Texture texture;
 
-    rectangle.setPosition(object->getPosition().getX(), object->getPosition().getY());
+    rectangle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
     if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
         rectangle.setTexture(&texture);
     else
@@ -229,10 +230,8 @@ void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
         return;
     text.setFont(font);
     text.setString(object->getAsset());
-    // TODO: tests ??
-    // text.setCharacterSize(OBJECT_SIZE);
     text.setFillColor(_getColor(object->getColor()));
-    text.setPosition(object->getPosition().getX(), object->getPosition().getY());
+    text.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
     _window.draw(text);
 }
 
