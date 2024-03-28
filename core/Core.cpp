@@ -154,7 +154,7 @@ std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
     objects.push_back(std::make_shared<Arcade::Object>(1,3, Arcade::Type::Text, Arcade::Color::WHITE, "Graphics:"));
     x = 5;
     for (auto &lib : _libsList) {
-        objects.push_back(std::make_shared<Arcade::Object>(x,3, Arcade::Type::Text, (lib == _selectedLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
+        objects.push_back(std::make_shared<Arcade::Object>(x,3, Arcade::Type::Text, (lib == _currentLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
         x += 5;
     }
     objects.push_back(std::make_shared<Arcade::Object>(37,2, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
@@ -183,6 +183,9 @@ std::string Core::getLibName(std::string const &path)
 std::string Core::getNextLib(std::string const &currentLib, std::vector<std::string> const &libs)
 {
     bool is_find = false;
+
+    if (!libs.empty() && libs.back() == currentLib)
+        return libs.front();
     for (auto &lib : libs) {
         if (is_find)
             return lib;
@@ -206,6 +209,9 @@ std::string Core::getPreviousLib(std::string const &currentLib, std::vector<std:
     bool is_find = false;
     std::string prev;
 
+    if (!libs.empty() && libs.front() == currentLib)
+        return libs.back();
+
     for (auto &lib : libs) {
         if (lib == currentLib) {
             if (is_find)
@@ -215,7 +221,7 @@ std::string Core::getPreviousLib(std::string const &currentLib, std::vector<std:
         prev = lib;
     }
     if (is_find && !libs.empty())
-        return libs.back();
+        return libs.front();
     return "";
 }
 
