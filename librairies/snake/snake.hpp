@@ -18,8 +18,15 @@ class snake : public Arcade::IGame {
             bool is_eating();
             bool is_dead();
             std::vector<std::shared_ptr<Arcade::Object>> get_snake();
+            void set_direction(Arcade::Event direction);
+            Arcade::Event get_direction();
+            Arcade::Event get_last_direction();
+            void set_last_direction(Arcade::Event direction);
         private:
             std::vector<std::shared_ptr<Arcade::Object>> _snake;
+            std::vector<Arcade::Event> _directions;
+            Arcade::Event _direction = Arcade::GAME_RIGHT;
+            Arcade::Event _last_direction = Arcade::NONE;
     };
     public:
         snake();

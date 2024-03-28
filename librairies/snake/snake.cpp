@@ -9,10 +9,77 @@
 
 snake::Player::Player()
 {
-    _snake.push_back(std::make_shared<Arcade::Object>(10, 10, Arcade::Type::Rectangle, Arcade::Color::GREEN, ASSET_PATH"snake/tail_left.png"));
-    _snake.push_back(std::make_shared<Arcade::Object>(10, 11, Arcade::Type::Rectangle, Arcade::Color::GREEN, ASSET_PATH"snake/body_horizontal.png"));
-    _snake.push_back(std::make_shared<Arcade::Object>(10, 12, Arcade::Type::Rectangle, Arcade::Color::GREEN, ASSET_PATH"snake/body_horizontal.png"));
-    _snake.push_back(std::make_shared<Arcade::Object>(10, 13, Arcade::Type::Rectangle, Arcade::Color::GREEN, ASSET_PATH"snake/head_right.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(22 * SIZE, 12 * SIZE, Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_left.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(23 * SIZE, 12 * SIZE, Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/body_horizontal.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(24 * SIZE, 12 * SIZE, Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/body_horizontal.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(25 * SIZE, 12 * SIZE, Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/head_right.png"));
+
+    _directions.push_back(Arcade::GAME_RIGHT);
+    _directions.push_back(Arcade::GAME_RIGHT);
+    _directions.push_back(Arcade::GAME_RIGHT);
+    _directions.push_back(Arcade::GAME_RIGHT);
+}
+
+void snake::Player::set_direction(Arcade::Event direction)
+{
+    _direction = direction;
+}
+
+Arcade::Event snake::Player::get_direction()
+{
+    return _direction;
+}
+
+Arcade::Event snake::Player::get_last_direction()
+{
+    return _last_direction;
+}
+
+void snake::Player::set_last_direction(Arcade::Event direction)
+{
+    _last_direction = direction;
+}
+
+void snake::Player::moove_player()
+{
+    int x = 0;
+    int y = 0;
+    std::shared_ptr<Arcade::Object> tmp;
+    std::vector<Arcade::Event> _tmp_directions;
+
+    if (get_direction() == Arcade::NONE) {
+        for (auto &obj : _snake) {
+            obj->setPosition(obj->getPosition().getX() + SIZE, obj->getPosition().getY());
+        }
+    }
+    if (get_direction() == Arcade::GAME_LEFT) {
+        for (size_t i = _snake.size(); i != 0 ; i--) {
+            if (i == _snake.size()) {
+                x = _snake[i]->getPosition().getX();
+                y = _snake[i]->getPosition().getY();
+                if (get_last_direction() == Arcade::GAME_UP) {
+                    _directions[i] = Arcade::GAME_LEFT;
+                    _snake[i]->setAsset("librairies/assets/snake/snake/head_left.png");
+                    _snake[i]->setPosition(x - SIZE, y);
+                } else if (get_last_direction() == Arcade::GAME_DOWN) {
+                    _directions[i] = Arcade::GAME_RIGHT;
+                    _snake[i]->setAsset("librairies/assets/snake/snake/head_right.png");
+                    _snake[i]->setPosition(x + SIZE, y);
+                } else if (get_last_direction() == Arcade::GAME_LEFT) {
+                    _directions[i] = Arcade::GAME_DOWN;
+                    _snake[i]->setAsset("librairies/assets/snake/snake/head_down.png");
+                    _snake[i]->setPosition(x, y + SIZE);
+                } else {
+                    _directions[i] = Arcade::GAME_UP;
+                    _snake[i]->setAsset("librairies/assets/snake/snake/head_up.png");
+                    _snake[i]->setPosition(x - SIZE, y - SIZE);
+                }
+            } else {
+                _snake[i]->setPosition(x, y);
+            }
+        }
+    }
+
 }
 
 std::vector<std::shared_ptr<Arcade::Object>> snake::Player::get_snake() {
@@ -33,17 +100,15 @@ snake::~snake()
 void snake::_initMap()
 {
     int color = 0;
-    for (int i = 0 ; i < 20 ; i++) {
+    for (int i = 2 ; i < 23 ; i++) {
         std::vector<std::shared_ptr<Arcade::Object>> line;
-        for (int j = 0 ; j < 20 ; j++) {
+        for (int j = 9 ; j < 40 ; j++) {
             if (j % 2 == color) {
-                line.push_back(std::make_shared<Arcade::Object>(i, j, Arcade::Type::Rectangle, Arcade::Color::GREEN,
-                                                                ASSET_PATH"grass.png"));
-                printf("green ");
+                line.push_back(std::make_shared<Arcade::Object>(j * SIZE, i * SIZE, Arcade::Type::Rectangle, Arcade::Color::GREEN,
+                                                                "librairies/assets/snake/grass.png"));
             } else {
-                line.push_back(std::make_shared<Arcade::Object>(i, j, Arcade::Type::Rectangle, Arcade::Color::GREEN,
-                                                                ASSET_PATH"grass2.png"));
-                printf("green2 ");
+                line.push_back(std::make_shared<Arcade::Object>(j * SIZE, i * SIZE, Arcade::Type::Rectangle, Arcade::Color::BLUE,
+                                                                "librairies/assets/snake/grass2.png"));
             }
         }
         printf("\n");
@@ -64,9 +129,13 @@ void snake::createObects()
     }
 }
 
-std::vector<std::shared_ptr<Arcade::Object>> snake::Turn(Arcade::Event event) {
+std::vector<std::shared_ptr<Arcade::Object>> snake::Turn(Arcade::Event event)
+{
     this->_objects.clear();
+    this->_snake_player.set_direction(event);
+    this->_snake_player.moove_player();
     createObects();
+
     return this->_objects;
 }
 
