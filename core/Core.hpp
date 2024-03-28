@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <memory>
+#include <map>
 #include "Object.hpp"
 #include "IDisplay.hpp"
 #include "IGame.hpp"
@@ -55,6 +56,10 @@ private:
     void manageMenuEvent(Arcade::Event event);
     std::string _selectedLib;
     std::string _selectedGame;
+    void saveScore();
+    void loadScores();
+    void setBestScores(int newScore);
+    std::map<std::string, std::pair<std::string, int>> _bestScores;
 
     public:
         /**
