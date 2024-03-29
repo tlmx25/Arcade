@@ -139,9 +139,9 @@ int Arcade::sfml::playTurn()
     sf::Time time = _clock.getElapsedTime();
     float seconds = time.asSeconds();
 
-    if (seconds >= 0.3f) {
+    if (seconds >= 0.4f) {
         _clock.restart();
-        return static_cast<int>(seconds / 0.3f);
+        return static_cast<int>(seconds / 0.4f);
     }
     return 0;
 }

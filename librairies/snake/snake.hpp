@@ -9,24 +9,24 @@
 #define ARCADE_SNAKE_HPP
 
 #include "IGame.hpp"
+#include <random>
 
 class snake : public Arcade::IGame {
     class Player {
         public:
             Player();
-            void moove_player();
-            bool is_eating();
+            int moove_player();
+            bool is_eating(std::shared_ptr<Arcade::Object> apple);
             bool is_dead();
+            bool he_win();
+            void eat();
             std::vector<std::shared_ptr<Arcade::Object>> get_snake();
             void set_direction(Arcade::Event direction);
             Arcade::Event get_direction();
-            Arcade::Event get_last_direction();
-            void set_last_direction(Arcade::Event direction);
         private:
             std::vector<std::shared_ptr<Arcade::Object>> _snake;
             std::vector<Arcade::Event> _directions;
             Arcade::Event _direction = Arcade::GAME_RIGHT;
-            Arcade::Event _last_direction = Arcade::NONE;
     };
     public:
         snake();
@@ -37,10 +37,13 @@ class snake : public Arcade::IGame {
     private:
         void createObects();
         std::shared_ptr<Arcade::Object> _apple;
+        std::shared_ptr<Arcade::Object> _score;
         std::vector<std::shared_ptr<Arcade::Object>> _objects;
         std::vector<std::vector<std::shared_ptr<Arcade::Object>>> _map;
         void _initMap();
         Player _snake_player;
+        int _scoreNumber = 0;
+        int game_over = 0;
 };
 
 extern "C" Arcade::IGame *entryPointGame();
