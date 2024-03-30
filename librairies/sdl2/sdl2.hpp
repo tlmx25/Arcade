@@ -22,10 +22,10 @@
 
 namespace Arcade {
     struct ColorRGBA {
-        int r;
-        int g;
-        int b;
-        int a;
+        Uint8 r;
+        Uint8 g;
+        Uint8 b;
+        Uint8 a;
     };
 /**
  * @class sdl2
