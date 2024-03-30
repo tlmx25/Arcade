@@ -78,6 +78,7 @@ const std::vector<std::pair<int, Arcade::Event>> keyEvents = {
  */
 Arcade::sdl2::sdl2()
 {
+    TTF_Init();
     //TODO : Throw errors instead of exit
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -156,14 +157,16 @@ void Arcade::sdl2::draw(std::shared_ptr<Arcade::Object> object)
  */
 Arcade::Event Arcade::sdl2::getInput()
 {
-    SDL_Event _event = {};
+    SDL_Event event = {};
 
-    while (SDL_PollEvent(&_event)) {
-        if (_event.type == SDL_QUIT)
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT)
             return Arcade::Event::ESCAPE;
-        for (auto &key : keyEvents) {
-            if (_event.key.keysym.sym == key.first)
-                return key.second;
+        if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+            for (auto &key : keyEvents) {
+                if (event.key.keysym.sym == key.first)
+                    return key.second;
+            }
         }
     }
     return Arcade::Event::NONE;
@@ -276,13 +279,15 @@ void Arcade::sdl2::drawRectangle(const std::shared_ptr<Arcade::Object> object)
 */
 void Arcade::sdl2::drawText(const std::shared_ptr<Arcade::Object> object)
 {
-    TTF_Font *font = TTF_OpenFont("assets/arial.ttf", 24);
+    TTF_Font *font = TTF_OpenFont("librairies/assets/arial.ttf", 24);
     ColorRGBA color = _getColor(object->getColor());
     SDL_Color sdlColor = {color.r, color.g, color.b, color.a};
     SDL_Surface *surface = TTF_RenderText_Solid(font, object->getAsset().c_str(), sdlColor);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, surface);
     SDL_Rect rect = {object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE, surface->w, surface->h};
 
+    if (!font || !surface || !texture)
+        return;
     SDL_RenderCopy(_renderer, texture, NULL, &rect);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
