@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <vector>
+#include <unistd.h>
 #include "IDisplay.hpp"
 #define OBJECT_SIZE 40
 
