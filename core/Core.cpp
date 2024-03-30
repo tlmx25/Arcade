@@ -46,11 +46,14 @@ void Core::mainLoop()
 {
     std::vector<std::shared_ptr<Arcade::Object>> objects;
     Arcade::Event event;
+    Arcade::Event Lastevent;
     int nbTurn;
 
     _isRunning = true;
     while (_isRunning) {
         event = _display->getInput();
+        if (event != Arcade::Event::NONE)
+            Lastevent = event;
         manageEvent(event);
         nbTurn = _display->playTurn();
         if (!nbTurn)
@@ -59,8 +62,10 @@ void Core::mainLoop()
         if (_isInMenu)
             objects = menu();
         else {
-            for (int i = 0; i < nbTurn; i++)
-                objects = _game->Turn(event);
+            for (int i = 0; i < nbTurn; i++) {
+                objects = _game->Turn(Lastevent);
+                Lastevent = Arcade::Event::NONE;
+            }
         }
         setBestScores(_game->getScore());
         for (auto &object : objects) {
@@ -115,8 +120,10 @@ void Core::loadAllLibs()
         try {
             lib.openLib(entry.path().string());
         } catch (const CLibEncapsulation::LibException &e) {
+            std::cerr << e.what() << std::endl;
             continue;
         }
+        std::cout << "lib: " << entry.path().string() << " is game: " << lib.isGameLib() << "is lib : "<< lib.isDisplayLib()<<  std::endl;
         if (lib.isGameLib())
             _gamesList.push_back(entry.path().string());
         else if (lib.isDisplayLib())
@@ -223,6 +230,7 @@ std::string Core::getPreviousLib(std::string const &currentLib, std::vector<std:
 {
     std::string prev;
 
+
     if (!libs.empty() && libs.front() == currentLib)
         return libs.back();
     for (auto &lib : libs) {
@@ -262,6 +270,7 @@ void Core::setGame(int PreviousOrNext)
     }
     _game = std::unique_ptr<Arcade::IGame>(game);
     _currentGame = newGame;
+    _isInMenu = false;
     _selectedGame = newGame;
 }
 

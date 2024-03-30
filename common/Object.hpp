@@ -142,6 +142,16 @@ namespace Arcade {
         Object(const int x, const int y, const Type &type, const Color &color, std::string asset) : _position(x, y), _type(type), _color(color), _asset(asset) {};
 
         /**
+        * @brief Construct a new Object object with given position, type, and color.
+        *
+        * @param position The position of the object.
+        * @param type The type of the object.
+        * @param color The color of the object.
+        * @param asset The asset of the object.
+        */
+        Object(const Position &position, const Type &type, const Color &color, std::string asset) : _position(position), _type(type), _color(color), _asset(asset) {};
+
+        /**
          * @brief Destructor of Object object
         */
         ~Object() {};

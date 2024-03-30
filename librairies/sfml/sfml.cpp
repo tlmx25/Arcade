@@ -139,9 +139,9 @@ int Arcade::sfml::playTurn()
     sf::Time time = _clock.getElapsedTime();
     float seconds = time.asSeconds();
 
-    if (seconds >= 0.3f) {
+    if (seconds >= 0.4f) {
         _clock.restart();
-        return static_cast<int>(seconds / 0.3f);
+        return static_cast<int>(seconds / 0.4f);
     }
     return 0;
 }
@@ -185,13 +185,18 @@ void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
 
 {
     sf::CircleShape circle(OBJECT_SIZE / 2);
+    sf::Texture texture;
 
-    circle.setFillColor(_getColor(object->getColor()));
     circle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
+    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
+        circle.setTexture(&texture);
+    else
+        circle.setFillColor(_getColor(object->getColor()));
     _window.draw(circle);
 }
 
 /**
+
  * @brief Draw a rectangle
  *
  * @param object
@@ -201,9 +206,13 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
 
 {
     sf::RectangleShape rectangle(sf::Vector2f(OBJECT_SIZE, OBJECT_SIZE));
+    sf::Texture texture;
 
-    rectangle.setFillColor(_getColor(object->getColor()));
     rectangle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
+    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
+        rectangle.setTexture(&texture);
+    else
+        rectangle.setFillColor(_getColor(object->getColor()));
     _window.draw(rectangle);
 }
 
@@ -212,7 +221,6 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
  *
  * @param object
 */
-
 void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
 {
     sf::Text text;
