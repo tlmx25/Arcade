@@ -20,6 +20,7 @@ TARGET_LINK_LIBRARIES(arcade dl)
 add_subdirectory(librairies/sfml)
 add_subdirectory(librairies/ncurses)
 add_subdirectory(librairies/sdl2)
+add_subdirectory(librairies/snake)
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "lib")
 
