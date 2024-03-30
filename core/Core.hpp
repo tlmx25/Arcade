@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <memory>
+#include <map>
 #include "Object.hpp"
 #include "IDisplay.hpp"
 #include "IGame.hpp"
@@ -42,7 +43,7 @@ private:
     bool _isInMenu = true; ///< A boolean to know if the core is in the menu.
     bool _isRunning = false; ///< A boolean to know if the core is running.*
     std::string _username; ///< The username of the player.
-    void manageEvent(Arcade::Event event);
+    void manageEvent(Arcade::Event &event);
     void manageUsername(Arcade::Event);
     std::vector<std::shared_ptr<Arcade::Object>> menu();
     void refreshLibs();
@@ -52,6 +53,13 @@ private:
     std::string getPreviousLib(std::string const &currentLib, std::vector<std::string> const &libs);
     void setGame(int PreviousOrNext);
     void setDisplay(int PreviousOrNext);
+    void manageMenuEvent(Arcade::Event event);
+    std::string _selectedLib;
+    std::string _selectedGame;
+    void saveScore();
+    void loadScores();
+    void setBestScores(int newScore);
+    std::map<std::string, std::pair<std::string, int>> _bestScores;
 
     public:
         /**

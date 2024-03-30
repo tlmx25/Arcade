@@ -6,6 +6,8 @@
 */
 
 #include <filesystem>
+#include <fstream>
+#include <regex>
 #include "Core.hpp"
 
 /**
@@ -24,7 +26,9 @@ Core::Core(std::string defaultLib)
     if (_display == nullptr)
         throw InvalidStartLibException("Impossible to load the library");
     loadAllLibs();
+    loadScores();
     _currentGame = "";
+    _selectedLib = _currentLib;
     _game = nullptr;
 }
 
@@ -42,11 +46,14 @@ void Core::mainLoop()
 {
     std::vector<std::shared_ptr<Arcade::Object>> objects;
     Arcade::Event event;
-    int nbTurn = 0;
+    Arcade::Event Lastevent;
+    int nbTurn;
 
     _isRunning = true;
     while (_isRunning) {
         event = _display->getInput();
+        if (event != Arcade::Event::NONE)
+            Lastevent = event;
         manageEvent(event);
         nbTurn = _display->playTurn();
         if (!nbTurn)
@@ -55,12 +62,16 @@ void Core::mainLoop()
         if (_isInMenu)
             objects = menu();
         else {
-            for (int i = 0; i < nbTurn; i++)
-                objects = _game->Turn(event);
+            for (int i = 0; i < nbTurn; i++) {
+                objects = _game->Turn(Lastevent);
+                Lastevent = Arcade::Event::NONE;
+            }
         }
+        setBestScores(_game->getScore());
         for (auto &object : objects) {
             _display->draw(object);
         }
+
         _display->updateWindow();
     }
 }
@@ -70,7 +81,7 @@ void Core::mainLoop()
  *
  * @param event The event to manage.
  */
-void Core::manageEvent(Arcade::Event event)
+void Core::manageEvent(Arcade::Event &event)
 {
     if (event == Arcade::Event::ESCAPE)
         _isRunning = false;
@@ -88,6 +99,10 @@ void Core::manageEvent(Arcade::Event event)
         setDisplay(1);
     if (event == Arcade::Event::PREV_LIB)
         setDisplay(-1);
+    if (_isInMenu)
+        manageMenuEvent(event);
+    if (event > Arcade::Event::NONE)
+        event = Arcade::Event::NONE;
 }
 
 /**
@@ -99,20 +114,25 @@ void Core::loadAllLibs()
     CLibEncapsulation lib;
 
     for (const auto &entry : std::filesystem::directory_iterator("lib")) {
-        std::cout << entry.path() << std::endl;
         if (entry.path().extension() != ".so") {
             continue;
         }
         try {
             lib.openLib(entry.path().string());
         } catch (const CLibEncapsulation::LibException &e) {
+            std::cerr << e.what() << std::endl;
             continue;
         }
+        std::cout << "lib: " << entry.path().string() << " is game: " << lib.isGameLib() << "is lib : "<< lib.isDisplayLib()<<  std::endl;
         if (lib.isGameLib())
             _gamesList.push_back(entry.path().string());
         else if (lib.isDisplayLib())
             _libsList.push_back(entry.path().string());
     }
+    if (!_gamesList.empty())
+        _selectedGame = _gamesList.front();
+    if (!_libsList.empty())
+        _selectedLib = _libsList.front();
 }
 
 /**
@@ -124,7 +144,9 @@ void Core::refreshLibs()
 {
     _libsList.clear();
     _gamesList.clear();
+    _bestScores.clear();
     loadAllLibs();
+    loadScores();
 }
 
 /**
@@ -136,20 +158,28 @@ std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
 {
     std::vector<std::shared_ptr<Arcade::Object>> objects;
 
-    objects.push_back(std::make_shared<Arcade::Object>(30,30, Arcade::Type::Text, Arcade::Color::WHITE, "Arcade"));
-    objects.push_back(std::make_shared<Arcade::Object>(30,60, Arcade::Type::Text, Arcade::Color::WHITE, "Games:"));
-    int x = 180;
+    objects.push_back(std::make_shared<Arcade::Object>(1,1, Arcade::Type::Text, Arcade::Color::WHITE, "Arcade"));
+    objects.push_back(std::make_shared<Arcade::Object>(1,2, Arcade::Type::Text, Arcade::Color::WHITE, "Games:"));
+    int x = 5;
     for (auto &game : _gamesList) {
-        objects.push_back(std::make_shared<Arcade::Object>(x,60, Arcade::Type::Text, Arcade::Color::WHITE, getLibName(game)));
-        x += 150;
+        objects.push_back(std::make_shared<Arcade::Object>(x,2, Arcade::Type::Text, (game == _selectedGame) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(game)));
+        x += 5;
     }
-    objects.push_back(std::make_shared<Arcade::Object>(30,90, Arcade::Type::Text, Arcade::Color::WHITE, "Graphics:"));
-    x = 180;
+    objects.push_back(std::make_shared<Arcade::Object>(1,3, Arcade::Type::Text, Arcade::Color::WHITE, "Graphics:"));
+    x = 5;
     for (auto &lib : _libsList) {
-        objects.push_back(std::make_shared<Arcade::Object>(x,90, Arcade::Type::Text, Arcade::Color::WHITE, getLibName(lib)));
-        x += 150;
+        objects.push_back(std::make_shared<Arcade::Object>(x,3, Arcade::Type::Text, (lib == _selectedLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
+        x += 5;
     }
-    objects.push_back(std::make_shared<Arcade::Object>(1500,120, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
+    objects.push_back(std::make_shared<Arcade::Object>(37,2, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
+    if (_bestScores.empty())
+        return objects;
+    objects.push_back(std::make_shared<Arcade::Object>(1,5, Arcade::Type::Text, Arcade::Color::WHITE, "Best scores:"));
+    x = 6;
+    for (auto &score : _bestScores) {
+        objects.push_back(std::make_shared<Arcade::Object>(2,x, Arcade::Type::Text, Arcade::Color::WHITE, getLibName(score.first) + ": " + score.second.first + " - " + std::to_string(score.second.second)));
+        x++;
+    }
     return objects;
 }
 
@@ -175,6 +205,9 @@ std::string Core::getLibName(std::string const &path)
 std::string Core::getNextLib(std::string const &currentLib, std::vector<std::string> const &libs)
 {
     bool is_find = false;
+
+    if (!libs.empty() && libs.back() == currentLib)
+        return libs.front();
     for (auto &lib : libs) {
         if (is_find)
             return lib;
@@ -195,19 +228,16 @@ std::string Core::getNextLib(std::string const &currentLib, std::vector<std::str
  */
 std::string Core::getPreviousLib(std::string const &currentLib, std::vector<std::string> const &libs)
 {
-    bool is_find = false;
     std::string prev;
 
+
+    if (!libs.empty() && libs.front() == currentLib)
+        return libs.back();
     for (auto &lib : libs) {
-        if (lib == currentLib) {
-            if (is_find)
-                return prev;
-            is_find = true;
-        }
+        if (lib == currentLib)
+            return prev;
         prev = lib;
     }
-    if (is_find && !libs.empty())
-        return libs.back();
     return "";
 }
 
@@ -240,6 +270,8 @@ void Core::setGame(int PreviousOrNext)
     }
     _game = std::unique_ptr<Arcade::IGame>(game);
     _currentGame = newGame;
+    _isInMenu = false;
+    _selectedGame = newGame;
 }
 
 /**
@@ -271,6 +303,7 @@ void Core::setDisplay(int PreviousOrNext)
     }
     _display = std::unique_ptr<Arcade::IDisplay>(display);
     _currentLib = newLib;
+    _selectedLib = newLib;
 }
 
 static const std::vector<std::pair<Arcade::Event, std::string >> keyEvents = {
@@ -329,5 +362,86 @@ void Core::manageUsername(Arcade::Event event)
             _username += key.second;
             return;
         }
+    }
+}
+
+/**
+** @brief Manage the menu event
+** @param event The event to manage.
+**/
+void Core::manageMenuEvent(Arcade::Event event)
+{
+    if (event == Arcade::Event::GAME_RIGHT)
+        _selectedGame = getNextLib(_selectedGame, _gamesList);
+    if (event == Arcade::Event::GAME_LEFT)
+        _selectedGame = getPreviousLib(_selectedGame, _gamesList);
+    if (event == Arcade::Event::GAME_DOWN)
+        _selectedLib = getPreviousLib(_selectedLib, _libsList);
+    if (event == Arcade::Event::GAME_UP)
+        _selectedLib = getNextLib(_selectedLib, _libsList);
+    if (event == Arcade::Event::ENTER) {
+        try {
+            CLibEncapsulation lib(_selectedGame);
+            _game = std::unique_ptr<Arcade::IGame>(lib.getElement<Arcade::IGame *>("entryPointGame"));
+            _isInMenu = false;
+        } catch (const CLibEncapsulation::LibException &e) {}
+        try {
+            CLibEncapsulation lib(_selectedLib);
+            _display = std::unique_ptr<Arcade::IDisplay>(lib.getElement<Arcade::IDisplay *>("entryPointDisplay"));
+        } catch (const CLibEncapsulation::LibException &e) {
+        }
+    }
+}
+
+/**
+ * @brief Save the score in file
+ *
+ */
+
+void Core::saveScore()
+{
+    std::ofstream file(".scores");
+
+    if (!file.is_open())
+        return;
+    for (auto &score : _bestScores) {
+        file << score.first << ":" << score.second.first << ":" << score.second.second << std::endl;
+    }
+    file.close();
+}
+
+/**
+ * @brief Load the scores from file
+ *
+ */
+void Core::loadScores()
+{
+    std::ifstream file(".scores");
+    std::string line;
+    std::smatch match;
+    std::regex regex(R"(^(.+):(.+):(\d+)$)");
+
+    if (!file.is_open())
+        return;
+    while (std::getline(file, line)) {
+        if (std::regex_match(line, match, regex)) {
+            _bestScores[match[1]] = std::make_pair(match[2], std::stoi(match[3]));
+        }
+    }
+    file.close();
+}
+
+/**
+ * @brief Set the best scores for the game
+ *
+ */
+
+void Core::setBestScores(int newScore)
+{
+    if (_bestScores.find(_currentGame) == _bestScores.end())
+        _bestScores[_currentGame] = std::make_pair(_username, 0);
+    if (_bestScores[_currentGame].second < newScore) {
+        _bestScores[_currentGame] = std::make_pair(_username, newScore);
+        saveScore();
     }
 }
