@@ -12,6 +12,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include <time.h>
+#include <unistd.h>
 #include <vector>
 #define OBJECT_SIZE 40
 

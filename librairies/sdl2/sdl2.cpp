@@ -238,18 +238,24 @@ void Arcade::sdl2::drawCircle(const std::shared_ptr<Arcade::Object> object)
     int radius = OBJECT_SIZE / 2;
     int x = object->getPosition().getX() * OBJECT_SIZE + radius;
     int y = object->getPosition().getY() * OBJECT_SIZE + radius;
-    // SDL_Rect rect = {x - radius, y - radius, radius * 2, radius * 2};
+    SDL_Rect rect = {x - radius, y - radius, radius * 2, radius * 2};
     ColorRGBA color = _getColor(object->getColor());
 
-    // TODO: texture et utiliser rect?
-    SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
-    for (int i = 0; i < radius; i++) {
-        for (int j = 0; j < radius; j++) {
-            if (i * i + j * j <= radius * radius) {
-                SDL_RenderDrawPoint(_renderer, x + i, y + j);
-                SDL_RenderDrawPoint(_renderer, x - i, y + j);
-                SDL_RenderDrawPoint(_renderer, x + i, y - j);
-                SDL_RenderDrawPoint(_renderer, x - i, y - j);
+    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && _loadTexture(object->getAsset().c_str())) {
+        for (auto &texture : _textures) {
+            if (texture.first == object->getAsset())
+                SDL_RenderCopy(_renderer, texture.second, NULL, &rect);
+        }
+    } else {
+        SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
+        for (int i = 0; i < radius; i++) {
+            for (int j = 0; j < radius; j++) {
+                if (i * i + j * j <= radius * radius) {
+                    SDL_RenderDrawPoint(_renderer, x + i, y + j);
+                    SDL_RenderDrawPoint(_renderer, x - i, y + j);
+                    SDL_RenderDrawPoint(_renderer, x + i, y - j);
+                    SDL_RenderDrawPoint(_renderer, x - i, y - j);
+                }
             }
         }
     }
@@ -267,9 +273,16 @@ void Arcade::sdl2::drawRectangle(const std::shared_ptr<Arcade::Object> object)
     SDL_Rect rect = {x, y, OBJECT_SIZE, OBJECT_SIZE};
     ColorRGBA color = _getColor(object->getColor());
 
-    SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderFillRect(_renderer, &rect);
-    SDL_RenderDrawRect(_renderer, &rect);
+    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && _loadTexture(object->getAsset().c_str())) {
+        for (auto &texture : _textures) {
+            if (texture.first == object->getAsset())
+                SDL_RenderCopy(_renderer, texture.second, NULL, &rect);
+        }
+    } else {
+        SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderFillRect(_renderer, &rect);
+        SDL_RenderDrawRect(_renderer, &rect);
+    }
 }
 
 /**
