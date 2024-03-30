@@ -13,6 +13,7 @@
 #include <SDL2/SDL_image.h>
 #include <time.h>
 #include <vector>
+#define OBJECT_SIZE 40
 
 /**
  * @file sdl2.hpp
@@ -20,6 +21,12 @@
  **/
 
 namespace Arcade {
+    struct ColorRGBA {
+        int r;
+        int g;
+        int b;
+        int a;
+    };
 /**
  * @class sdl2
  * @brief A class to represent the sdl2 library in the Arcade project.
@@ -43,6 +50,7 @@ namespace Arcade {
         SDL_Surface *_surface;
         std::vector<std::pair<std::string, SDL_Texture *>> _textures;
         clock_t _clock;
+        ColorRGBA _getColor(Arcade::Color color);
         bool _loadTexture(const std::string &path);
         void drawCircle(const std::shared_ptr<Arcade::Object> object) override;
         void drawRectangle(const std::shared_ptr<Arcade::Object> object) override;

@@ -7,6 +7,17 @@
 
 #include "sdl2.hpp"
 
+const std::vector<std::pair<Arcade::Color, Arcade::ColorRGBA>> colorMap = {
+    {Arcade::Color::RED, {255, 0, 0, 255}},
+    {Arcade::Color::GREEN, {0, 255, 0, 255}},
+    {Arcade::Color::BLUE, {0, 0, 255, 255}},
+    {Arcade::Color::YELLOW, {255, 255, 0, 255}},
+    {Arcade::Color::WHITE, {255, 255, 255, 255}},
+    {Arcade::Color::BLACK, {0, 0, 0, 255}},
+    {Arcade::Color::GREY, {128, 128, 128, 255}},
+    {Arcade::Color::PURPLE, {255, 0, 255, 255}},
+};
+
 const std::vector<std::pair<int, Arcade::Event>> keyEvents = {
     {SDLK_ESCAPE, Arcade::Event::ESCAPE},
     {SDLK_UP, Arcade::Event::GAME_UP},
@@ -196,4 +207,87 @@ bool Arcade::sdl2::_loadTexture(const std::string &path)
     }
     _textures.push_back(std::make_pair(path, texture));
     return true;
+}
+
+/**
+ * @brief Get the color
+ * 
+ * @param color
+ * 
+ * @return ColorRGBA
+*/
+Arcade::ColorRGBA Arcade::sdl2::_getColor(Arcade::Color color)
+{
+    for (auto &colorPair : colorMap) {
+        if (colorPair.first == color)
+            return colorPair.second;
+    }
+    return {0, 0, 0, 255};
+}
+
+/**
+ * @brief Draw a circle
+ * 
+ * @param object
+*/
+void Arcade::sdl2::drawCircle(const std::shared_ptr<Arcade::Object> object)
+{
+    int radius = OBJECT_SIZE / 2;
+    int x = object->getPosition().getX() * OBJECT_SIZE + radius;
+    int y = object->getPosition().getY() * OBJECT_SIZE + radius;
+    SDL_Rect rect = {x - radius, y - radius, radius * 2, radius * 2};
+    ColorRGBA color = _getColor(object->getColor());
+
+    SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
+    for (int i = 0; i < radius; i++) {
+        for (int j = 0; j < radius; j++) {
+            if (i * i + j * j <= radius * radius)
+                SDL_RenderDrawPoint(_renderer, x + i, y + j);
+                SDL_RenderDrawPoint(_renderer, x - i, y + j);
+                SDL_RenderDrawPoint(_renderer, x + i, y - j);
+                SDL_RenderDrawPoint(_renderer, x - i, y - j);
+        }
+    }
+}
+
+/**
+ * @brief Draw a rectangle
+ * 
+ * @param object
+*/
+void Arcade::sdl2::drawRectangle(const std::shared_ptr<Arcade::Object> object)
+{
+    int x = object->getPosition().getX() * OBJECT_SIZE;
+    int y = object->getPosition().getY() * OBJECT_SIZE;
+    SDL_Rect rect = {x, y, OBJECT_SIZE, OBJECT_SIZE};
+    ColorRGBA color = _getColor(object->getColor());
+
+    SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderFillRect(_renderer, &rect);
+    SDL_RenderDrawRect(_renderer, &rect);
+}
+
+/**
+ * @brief Draw a text
+ * 
+ * @param object
+*/
+void Arcade::sdl2::drawText(const std::shared_ptr<Arcade::Object> object)
+{
+    TTF_Font *font = TTF_OpenFont("assets/arial.ttf", 24);
+    ColorRGBA color = _getColor(object->getColor());
+    SDL_Color sdlColor = {color.r, color.g, color.b, color.a};
+    SDL_Surface *surface = TTF_RenderText_Solid(font, object->getAsset().c_str(), sdlColor);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, surface);
+    SDL_Rect rect = {object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE, surface->w, surface->h};
+
+    SDL_RenderCopy(_renderer, texture, NULL, &rect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+    TTF_CloseFont(font);
+}
+
+extern "C" Arcade::sdl2 *entryPointDisplay()
+{
+    return new Arcade::sdl2();
 }
