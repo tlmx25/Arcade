@@ -32,6 +32,7 @@ if [ "$1" = "ninja" ]; then
 
   if [ "$2" = "debug" ]; then
     mkdir -p build && cd build && cmake .. -G "Ninja" -DCMAKE_BUILD_TYPE=Debug && ninja && cd ..
+    echo "Debug mode"
     exit 0
   fi
   mkdir -p build && cd build && cmake .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release && ninja && cd ..

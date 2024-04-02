@@ -67,7 +67,8 @@ void Core::mainLoop()
                 Lastevent = Arcade::Event::NONE;
             }
         }
-        setBestScores(_game->getScore());
+        if (_game != nullptr)
+            setBestScores(_game->getScore());
         for (auto &object : objects) {
             _display->draw(object);
         }
