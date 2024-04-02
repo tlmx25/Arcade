@@ -113,6 +113,8 @@ Arcade::sdl2::~sdl2()
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
+    for (auto texture : _textures)
+        SDL_DestroyTexture(texture.second);
     _textures.clear();
 }
 
@@ -180,11 +182,11 @@ Arcade::Event Arcade::sdl2::getInput()
 int Arcade::sdl2::playTurn()
 {
     clock_t new_clock = clock();
-    int time = (new_clock - _clock) / CLOCKS_PER_SEC;
+    long time = (new_clock - _clock) / CLOCKS_PER_SEC;
 
-    if (time >= 1) {
+    if (time >= 0.4l) {
         _clock = new_clock;
-        return time;
+        return static_cast<int>(time / 0.4l);
     }
     return 0;
 }
@@ -198,7 +200,7 @@ int Arcade::sdl2::playTurn()
 */
 bool Arcade::sdl2::_loadTexture(const std::string &path)
 {
-    if (_textures.size() > 0) {
+    if (!_textures.empty()) {
         for (auto &texture : _textures) {
             if (texture.first == path)
                 return true;
@@ -208,7 +210,7 @@ bool Arcade::sdl2::_loadTexture(const std::string &path)
     if (texture == nullptr) {
         return false;
     }
-    _textures.push_back(std::make_pair(path, texture));
+    _textures.emplace_back(path, texture);
     return true;
 }
 
@@ -273,10 +275,10 @@ void Arcade::sdl2::drawRectangle(const std::shared_ptr<Arcade::Object> object)
     SDL_Rect rect = {x, y, OBJECT_SIZE, OBJECT_SIZE};
     ColorRGBA color = _getColor(object->getColor());
 
-    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && _loadTexture(object->getAsset().c_str())) {
+    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && _loadTexture(object->getAsset())) {
         for (auto &texture : _textures) {
             if (texture.first == object->getAsset())
-                SDL_RenderCopy(_renderer, texture.second, NULL, &rect);
+                SDL_RenderCopy(_renderer, texture.second, nullptr, &rect);
         }
     } else {
         SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
