@@ -190,7 +190,7 @@ void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
     circle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
     if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
         circle.setTexture(&texture);
-    else
+    if (circle.getTexture() == nullptr)
         circle.setFillColor(_getColor(object->getColor()));
     _window.draw(circle);
 }
@@ -212,6 +212,8 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
     if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
         rectangle.setTexture(&texture);
     else
+        rectangle.setFillColor(_getColor(object->getColor()));
+    if (rectangle.getTexture() == nullptr)
         rectangle.setFillColor(_getColor(object->getColor()));
     _window.draw(rectangle);
 }

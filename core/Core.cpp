@@ -67,7 +67,8 @@ void Core::mainLoop()
                 Lastevent = Arcade::Event::NONE;
             }
         }
-        setBestScores(_game->getScore());
+        if (_game != nullptr)
+            setBestScores(_game->getScore());
         for (auto &object : objects) {
             _display->draw(object);
         }
@@ -123,7 +124,6 @@ void Core::loadAllLibs()
             std::cerr << e.what() << std::endl;
             continue;
         }
-        std::cout << "lib: " << entry.path().string() << " is game: " << lib.isGameLib() << "is lib : "<< lib.isDisplayLib()<<  std::endl;
         if (lib.isGameLib())
             _gamesList.push_back(entry.path().string());
         else if (lib.isDisplayLib())
@@ -169,7 +169,7 @@ std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
     x = 5;
     for (auto &lib : _libsList) {
         objects.push_back(std::make_shared<Arcade::Object>(x,3, Arcade::Type::Text, (lib == _selectedLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
-        x += 5;
+        x += 8;
     }
     objects.push_back(std::make_shared<Arcade::Object>(37,2, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
     if (_bestScores.empty())
@@ -384,12 +384,17 @@ void Core::manageMenuEvent(Arcade::Event event)
             CLibEncapsulation lib(_selectedGame);
             _game = std::unique_ptr<Arcade::IGame>(lib.getElement<Arcade::IGame *>("entryPointGame"));
             _isInMenu = false;
+            _currentGame = _selectedGame;
         } catch (const CLibEncapsulation::LibException &e) {}
         try {
+            if (_selectedLib == _currentLib)
+                return;
             CLibEncapsulation lib(_selectedLib);
             _display = std::unique_ptr<Arcade::IDisplay>(lib.getElement<Arcade::IDisplay *>("entryPointDisplay"));
         } catch (const CLibEncapsulation::LibException &e) {
         }
+        if (_display == nullptr)
+            throw InvalidStartLibException("Impossible to load the library");
     }
 }
 
@@ -405,6 +410,7 @@ void Core::saveScore()
     if (!file.is_open())
         return;
     for (auto &score : _bestScores) {
+
         file << score.first << ":" << score.second.first << ":" << score.second.second << std::endl;
     }
     file.close();
@@ -438,6 +444,8 @@ void Core::loadScores()
 
 void Core::setBestScores(int newScore)
 {
+    if (_username.empty())
+        return;
     if (_bestScores.find(_currentGame) == _bestScores.end())
         _bestScores[_currentGame] = std::make_pair(_username, 0);
     if (_bestScores[_currentGame].second < newScore) {

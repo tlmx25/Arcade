@@ -37,19 +37,16 @@ void snake::Player::eat() {
         _directions.insert(_directions.begin(), Arcade::GAME_UP);
     }
     if (_directions[0] == Arcade::Event::GAME_DOWN) {
-        ("down\n");
         _snake[0]->setAsset("librairies/assets/snake/snake/body_vertical.png");
         _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX(), _snake[0]->getPosition().getY() - 1, Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_up.png"));
         _directions.insert(_directions.begin(), Arcade::GAME_DOWN);
     }
     if (_directions[0] == Arcade::Event::GAME_LEFT) {
-        ("left\n");
         _snake[0]->setAsset("librairies/assets/snake/snake/body_horizontal.png");
         _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX() + 1, _snake[0]->getPosition().getY(), Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_right.png"));
         _directions.insert(_directions.begin(), Arcade::GAME_LEFT);
     }
     if (_directions[0] == Arcade::Event::GAME_RIGHT) {
-        ("right\n");
         _snake[0]->setAsset("librairies/assets/snake/snake/body_horizontal.png");
         _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX() - 1, _snake[0]->getPosition().getY(), Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_left.png"));
         _directions.insert(_directions.begin(), Arcade::GAME_RIGHT);
@@ -331,7 +328,6 @@ void snake::_initMap()
                                                                 "librairies/assets/snake/grass2.png"));
             }
         }
-        ("\n");
         color = !color;
         this->_map.push_back(line);
     }
