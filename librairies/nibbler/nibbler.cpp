@@ -6,7 +6,6 @@
 */
 
 #include "nibbler.hpp"
-
 nibbler::nibbler()
 {
     initMap();
@@ -14,7 +13,7 @@ nibbler::nibbler()
 
 void nibbler::initMap()
 {
-    std::ifstream file("librairies/assets/nibbler/map1.txt"); // replace with your file path
+    /*std::ifstream file("librairies/assets/nibbler/map1.txt"); // replace with your file path
     if (!file) {
         std::cerr << "Unable to open file\n";
         return; // return with error code
@@ -27,5 +26,5 @@ void nibbler::initMap()
     }
 
     file.close();
-    return;
+    return;*/
 }
