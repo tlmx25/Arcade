@@ -79,26 +79,17 @@ const std::vector<std::pair<int, Arcade::Event>> keyEvents = {
 Arcade::sdl2::sdl2()
 {
     TTF_Init();
-    //TODO : Throw errors instead of exit
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        exit(84);
-    }
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+        throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
     _window = SDL_CreateWindow("Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, SDL_WINDOW_SHOWN);
-    if (_window == nullptr) {
-        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-        exit(84);
-    }
+    if (_window == nullptr)
+        throw std::runtime_error("SDL_CreateWindow Error: " + std::string(SDL_GetError()));
     _surface = SDL_GetWindowSurface(_window);
-    if (_surface == nullptr) {
-        std::cerr << "SDL_GetWindowSurface Error: " << SDL_GetError() << std::endl;
-        exit(84);
-    }
+    if (_surface == nullptr)
+        throw std::runtime_error("SDL_GetWindowSurface Error: " + std::string(SDL_GetError()));
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-    if (_renderer == nullptr) {
-        std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-        exit(84);
-    }
+    if (_renderer == nullptr)
+        throw std::runtime_error("SDL_CreateRenderer Error: " + std::string(SDL_GetError()));
     _clock = clock();
 }
 
@@ -302,7 +293,7 @@ void Arcade::sdl2::drawText(const std::shared_ptr<Arcade::Object> object)
     SDL_Rect rect = {object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE, surface->w, surface->h};
 
     if (!font || !surface || !texture)
-        return;
+        throw std::runtime_error("SDL Error: " + std::string(SDL_GetError()));
     SDL_RenderCopy(_renderer, texture, NULL, &rect);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);

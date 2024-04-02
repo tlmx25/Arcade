@@ -38,7 +38,7 @@ namespace Arcade {
 
     public:
         sdl2();
-        ~sdl2();
+        ~sdl2() override;
         void clearWindow() override;
         void updateWindow() override;
         void draw(std::shared_ptr<Arcade::Object> object) override;
