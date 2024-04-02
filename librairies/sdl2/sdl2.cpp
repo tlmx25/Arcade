@@ -82,14 +82,20 @@ Arcade::sdl2::sdl2()
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
         throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
     _window = SDL_CreateWindow("Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, SDL_WINDOW_SHOWN);
-    if (_window == nullptr)
+    if (_window == nullptr) {
+        SDL_Quit();
         throw std::runtime_error("SDL_CreateWindow Error: " + std::string(SDL_GetError()));
+    }
     _surface = SDL_GetWindowSurface(_window);
-    if (_surface == nullptr)
+    if (_surface == nullptr) {
+        deleteSdl();
         throw std::runtime_error("SDL_GetWindowSurface Error: " + std::string(SDL_GetError()));
+    }
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-    if (_renderer == nullptr)
+    if (_renderer == nullptr) {
+        deleteSdl();
         throw std::runtime_error("SDL_CreateRenderer Error: " + std::string(SDL_GetError()));
+    }
     _clock = clock();
 }
 
@@ -99,12 +105,24 @@ Arcade::sdl2::sdl2()
  */
 Arcade::sdl2::~sdl2()
 {
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
+    deleteSdl();
+}
+
+/**
+ * @brief Delete sdl component
+ */
+void Arcade::sdl2::deleteSdl()
+{
+    if (_surface)
+        SDL_FreeSurface(_surface);
+    if (_renderer)
+        SDL_DestroyRenderer(_renderer);
+    if (_window)
+        SDL_DestroyWindow(_window);
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
-    for (auto texture : _textures)
+    for (auto &texture : _textures)
         SDL_DestroyTexture(texture.second);
     _textures.clear();
 }
