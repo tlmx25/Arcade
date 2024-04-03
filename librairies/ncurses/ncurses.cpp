@@ -251,9 +251,9 @@ void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
     std::string text = object->getAsset();  
 
-    attron(COLOR_PAIR(color));
+    attron(COLOR_PAIR(10 + color));
     mvprintw(y, x, "%s", text.c_str());
-    attroff(COLOR_PAIR(color));
+    attroff(COLOR_PAIR(10 + color));
 }
 
 extern "C" Arcade::ncurses *entryPointDisplay()
