@@ -160,9 +160,15 @@ void Arcade::ncurses::define_pair_colors()
     init_pair(3, COLOR_BLUE, COLOR_BLACK);
     init_pair(4, COLOR_YELLOW, COLOR_BLACK);
     init_pair(5, COLOR_WHITE, COLOR_BLACK);
-    init_pair(6, COLOR_BLACK, COLOR_BLACK);
-    init_pair(7, COLOR_WHITE, COLOR_BLACK);
-    init_pair(8, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(6, COLOR_WHITE, COLOR_BLACK);
+    init_pair(7, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(8, COLOR_BLACK, COLOR_RED);
+    init_pair(9, COLOR_BLACK, COLOR_GREEN);
+    init_pair(10, COLOR_BLACK, COLOR_BLUE);
+    init_pair(11, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(12, COLOR_BLACK, COLOR_WHITE);
+    init_pair(13, COLOR_BLACK, COLOR_WHITE);
+    init_pair(14, COLOR_BLACK, COLOR_MAGENTA);
 }
 
 /**
@@ -245,9 +251,9 @@ void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
     std::string text = object->getAsset();  
 
-    attron(COLOR_PAIR(color));
+    attron(COLOR_PAIR(10 + color));
     mvprintw(y, x, "%s", text.c_str());
-    attroff(COLOR_PAIR(color));
+    attroff(COLOR_PAIR(10 + color));
 }
 
 extern "C" Arcade::ncurses *entryPointDisplay()
