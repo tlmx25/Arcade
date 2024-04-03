@@ -169,7 +169,7 @@ std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
     x = 5;
     for (auto &lib : _libsList) {
         objects.push_back(std::make_shared<Arcade::Object>(x,3, Arcade::Type::Text, (lib == _selectedLib) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(lib)));
-        x += 5;
+        x += 8;
     }
     objects.push_back(std::make_shared<Arcade::Object>(37,2, Arcade::Type::Text, Arcade::Color::WHITE, "Username: " + _username));
     if (_bestScores.empty())
@@ -283,6 +283,7 @@ void Core::setDisplay(int PreviousOrNext)
 {
     std::string newLib;
     Arcade::IDisplay *display;
+    CLibEncapsulation lib;
 
     if (PreviousOrNext != 1 && PreviousOrNext != -1)
         return;
@@ -293,14 +294,15 @@ void Core::setDisplay(int PreviousOrNext)
     if (newLib.empty() || newLib == _currentLib)
         return;
     try {
-        CLibEncapsulation lib(newLib);
-        display = lib.getElement<Arcade::IDisplay *>("entryPointDisplay");
-        if (display == nullptr)
-            throw InvalidStartLibException("Impossible to load the library");
+        lib.openLib(newLib);
     } catch (const CLibEncapsulation::LibException &e) {
         std::cerr << e.what() << std::endl;
         return;
     }
+    _display = std::unique_ptr<Arcade::IDisplay>(nullptr);
+    display = lib.getElement<Arcade::IDisplay *>("entryPointDisplay");
+    if (display == nullptr)
+        throw InvalidStartLibException("Impossible to load the library");
     _display = std::unique_ptr<Arcade::IDisplay>(display);
     _currentLib = newLib;
     _selectedLib = newLib;
@@ -390,9 +392,12 @@ void Core::manageMenuEvent(Arcade::Event event)
             if (_selectedLib == _currentLib)
                 return;
             CLibEncapsulation lib(_selectedLib);
+            _display = std::unique_ptr<Arcade::IDisplay>(nullptr);
             _display = std::unique_ptr<Arcade::IDisplay>(lib.getElement<Arcade::IDisplay *>("entryPointDisplay"));
         } catch (const CLibEncapsulation::LibException &e) {
         }
+        if (_display == nullptr)
+            throw InvalidStartLibException("Impossible to load the library");
     }
 }
 

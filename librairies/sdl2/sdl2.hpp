@@ -46,9 +46,9 @@ namespace Arcade {
         int playTurn() override;
 
     private:
-        SDL_Window *_window;
-        SDL_Renderer *_renderer;
-        SDL_Surface *_surface;
+        SDL_Window *_window = nullptr;
+        SDL_Renderer *_renderer = nullptr;
+        SDL_Surface *_surface = nullptr;
         std::vector<std::pair<std::string, SDL_Texture *>> _textures;
         clock_t _clock;
         ColorRGBA _getColor(Arcade::Color color);
@@ -56,6 +56,7 @@ namespace Arcade {
         void drawCircle(const std::shared_ptr<Arcade::Object> object) override;
         void drawRectangle(const std::shared_ptr<Arcade::Object> object) override;
         void drawText(const std::shared_ptr<Arcade::Object> object) override;
+        void deleteSdl();
     };
 }
 
