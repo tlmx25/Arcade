@@ -113,8 +113,6 @@ Arcade::sdl2::~sdl2()
  */
 void Arcade::sdl2::deleteSdl()
 {
-    if (_surface)
-        SDL_FreeSurface(_surface);
     if (_renderer)
         SDL_DestroyRenderer(_renderer);
     if (_window)

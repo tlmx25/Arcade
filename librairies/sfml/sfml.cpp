@@ -67,6 +67,7 @@ const std::vector<std::pair<sf::Keyboard::Key, Arcade::Event>> keyEvents = {
 */
 Arcade::sfml::sfml() : _window(sf::VideoMode(1920, 1080), "Arcade")
 {
+    _window.setFramerateLimit(60);
     _clock = sf::Clock();
 }
 
