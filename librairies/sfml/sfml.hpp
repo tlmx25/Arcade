@@ -44,6 +44,9 @@ namespace Arcade {
         void drawCircle(std::shared_ptr<Arcade::Object> object) override;
         void drawRectangle(std::shared_ptr<Arcade::Object> object) override;
         void drawText(std::shared_ptr<Arcade::Object> object) override;
+        std::map<std::string , sf::Texture> _textures;
+        sf::Font _font;
+        bool _fontLoaded = false;
     };
 }
 
