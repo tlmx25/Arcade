@@ -34,7 +34,7 @@ class nibbler : public Arcade::IGame{
         nibbler();
         ~nibbler() override;
         std::vector<std::shared_ptr<Arcade::Object>> Turn(Arcade::Event event) override;
-        void init() override {};
+        void init() override;
         int getScore() override;
     private:
         void createObects();
