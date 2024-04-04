@@ -12,7 +12,7 @@
 #include <ctime>
 #include <cmath>
 #include <vector>
-#define OBJECT_SIZE 40
+#define OBJECT_SIZE 1
 #define SQUARE_WIDTH 4
 #define SQUARE_HEIGHT 2
 
@@ -42,7 +42,6 @@ namespace Arcade {
     private:
         clock_t _clock;
         void define_pair_colors();
-        int _getColor(Arcade::Color color);
         void drawCircle(const std::shared_ptr<Arcade::Object> object) override;
         void drawRectangle(const std::shared_ptr<Arcade::Object> object) override;
         void drawText(const std::shared_ptr<Arcade::Object> object) override;
