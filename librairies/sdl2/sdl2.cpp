@@ -120,8 +120,8 @@ void Arcade::sdl2::deleteSdl()
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
-    for (auto &texture : _textures)
-        SDL_DestroyTexture(texture.second);
+//    for (auto &texture : _textures)
+//        SDL_DestroyTexture(texture.second);
     _textures.clear();
 }
 
