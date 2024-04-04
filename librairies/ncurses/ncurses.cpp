@@ -187,8 +187,8 @@ void Arcade::ncurses::drawCircle(const std::shared_ptr<Arcade::Object> object)
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
 
     attron(COLOR_PAIR(color));
-    for (int i = 0; i < OBJECT_SIZE; i++) {
-        for (int j = 0; j < OBJECT_SIZE; j++) {
+    for (int i = 0; i < SQUARE_WIDTH; i++) {
+        for (int j = 0; j < SQUARE_HEIGHT; j++) {
                 mvprintw(y + j, x + i, " ");
             }
     }
@@ -207,8 +207,8 @@ void Arcade::ncurses::drawRectangle(const std::shared_ptr<Arcade::Object> object
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
 
     attron(COLOR_PAIR(color));
-    for (int i = 0; i < OBJECT_SIZE; i++) {
-        for (int j = 0; j < OBJECT_SIZE; j++) {
+    for (int i = 0; i < SQUARE_WIDTH; i++) {
+        for (int j = 0; j < SQUARE_HEIGHT; j++) {
             mvprintw(y + j, x + i, " ");
         }
     }
@@ -225,9 +225,10 @@ void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
     int color = object->getColor();
     int x = object->getPosition().getX() * SQUARE_WIDTH;
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
+    std::string text = object->getAsset();  
 
     attron(COLOR_PAIR(10 + color));
-    mvprintw(y, x, "%s", object->getAsset().c_str());
+    mvprintw(y, x, "%s", text.c_str());
     attroff(COLOR_PAIR(10 + color));
 }
 
