@@ -143,9 +143,9 @@ int Arcade::ncurses::playTurn()
     clock_t new_clock = clock();
     int time = (new_clock - _clock) / CLOCKS_PER_SEC;
 
-    if (time >= 1) {
+    if (time >= 0.8f) {
         _clock = new_clock;
-        return time;
+        return time / 0.8f;
     }
     return 0;
 }
