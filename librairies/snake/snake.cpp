@@ -7,12 +7,22 @@
 
 #include "snake.hpp"
 
+Arcade::Color snake::Player::get_random_color() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(0, 6);
+    int randomIndex = distribution(gen);
+    if (randomIndex == 6)
+        return (Arcade::Color::BLUE);
+    return (Arcade::Color)randomIndex;
+}
+
 snake::Player::Player()
 {
-    _snake.push_back(std::make_shared<Arcade::Object>(22 , 12 , Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_left.png"));
-    _snake.push_back(std::make_shared<Arcade::Object>(23 , 12 , Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/body_horizontal.png"));
-    _snake.push_back(std::make_shared<Arcade::Object>(24 , 12 , Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/body_horizontal.png"));
-    _snake.push_back(std::make_shared<Arcade::Object>(25 , 12 , Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/head_right.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(22 , 12 , Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/tail_left.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(23 , 12 , Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/body_horizontal.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(24 , 12 , Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/body_horizontal.png"));
+    _snake.push_back(std::make_shared<Arcade::Object>(25 , 12 , Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/head_right.png"));
 
     _directions.push_back(Arcade::GAME_RIGHT);
     _directions.push_back(Arcade::GAME_RIGHT);
@@ -33,22 +43,22 @@ Arcade::Event snake::Player::get_direction()
 void snake::Player::eat() {
     if (_directions[0] == Arcade::Event::GAME_UP) {
         _snake[0]->setAsset("librairies/assets/snake/snake/body_vertical.png");
-        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX(), _snake[0]->getPosition().getY() + 1, Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_down.png"));
+        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX(), _snake[0]->getPosition().getY() + 1, Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/tail_down.png"));
         _directions.insert(_directions.begin(), Arcade::GAME_UP);
     }
     if (_directions[0] == Arcade::Event::GAME_DOWN) {
         _snake[0]->setAsset("librairies/assets/snake/snake/body_vertical.png");
-        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX(), _snake[0]->getPosition().getY() - 1, Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_up.png"));
+        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX(), _snake[0]->getPosition().getY() - 1, Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/tail_up.png"));
         _directions.insert(_directions.begin(), Arcade::GAME_DOWN);
     }
     if (_directions[0] == Arcade::Event::GAME_LEFT) {
         _snake[0]->setAsset("librairies/assets/snake/snake/body_horizontal.png");
-        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX() + 1, _snake[0]->getPosition().getY(), Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_right.png"));
+        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX() + 1, _snake[0]->getPosition().getY(), Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/tail_right.png"));
         _directions.insert(_directions.begin(), Arcade::GAME_LEFT);
     }
     if (_directions[0] == Arcade::Event::GAME_RIGHT) {
         _snake[0]->setAsset("librairies/assets/snake/snake/body_horizontal.png");
-        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX() - 1, _snake[0]->getPosition().getY(), Arcade::Type::Rectangle, Arcade::Color::GREEN, "librairies/assets/snake/snake/tail_left.png"));
+        _snake.insert(_snake.begin(), std::make_shared<Arcade::Object>(_snake[0]->getPosition().getX() - 1, _snake[0]->getPosition().getY(), Arcade::Type::Rectangle, get_random_color(), "librairies/assets/snake/snake/tail_left.png"));
         _directions.insert(_directions.begin(), Arcade::GAME_RIGHT);
     }
 }
@@ -321,10 +331,10 @@ void snake::_initMap()
         std::vector<std::shared_ptr<Arcade::Object>> line;
         for (int j = 9 ; j < 40 ; j++) {
             if (j % 2 == color) {
-                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::GREEN,
+                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::WHITE,
                                                                 "librairies/assets/snake/grass.png"));
             } else {
-                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::BLUE,
+                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::WHITE,
                                                                 "librairies/assets/snake/grass2.png"));
             }
         }
