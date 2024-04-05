@@ -143,9 +143,9 @@ int Arcade::ncurses::playTurn()
     clock_t new_clock = clock();
     int time = (new_clock - _clock) / CLOCKS_PER_SEC;
 
-    if (time >= 1) {
+    if (time >= 0.8f) {
         _clock = new_clock;
-        return time;
+        return time / 0.8f;
     }
     return 0;
 }
@@ -155,41 +155,24 @@ int Arcade::ncurses::playTurn()
 */
 void Arcade::ncurses::define_pair_colors()
 {
-    init_pair(1, COLOR_RED, COLOR_BLACK);
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);
-    init_pair(3, COLOR_BLUE, COLOR_BLACK);
-    init_pair(4, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(5, COLOR_WHITE, COLOR_BLACK);
-    init_pair(6, COLOR_BLACK, COLOR_BLACK);
+    init_pair(0, COLOR_BLACK, COLOR_BLUE);
+    init_pair(1, COLOR_BLACK, COLOR_RED);
+    init_pair(2, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(3, COLOR_BLACK, COLOR_MAGENTA);
+    init_pair(4, COLOR_BLACK, COLOR_WHITE);
+    init_pair(5, COLOR_BLACK, COLOR_GREEN);
+    init_pair(6, COLOR_BLACK, COLOR_WHITE);
     init_pair(7, COLOR_WHITE, COLOR_BLACK);
-    init_pair(8, COLOR_MAGENTA, COLOR_BLACK);
-}
-
-/**
- * @brief Get the color
- *
- * @param color
- * @return int
-*/
-int Arcade::ncurses::_getColor(Arcade::Color color)
-{
-    if (color == Arcade::Color::RED)
-        return 1;
-    if (color == Arcade::Color::GREEN)
-        return 2;
-    if (color == Arcade::Color::BLUE)
-        return 3;
-    if (color == Arcade::Color::YELLOW)
-        return 4;
-    if (color == Arcade::Color::WHITE)
-        return 5;
-    if (color == Arcade::Color::BLACK)
-        return 6;
-    if (color == Arcade::Color::GREY)
-        return 7;
-    if (color == Arcade::Color::PURPLE)
-        return 8;
-    return 6;
+    init_pair(8, COLOR_BLACK, COLOR_WHITE);
+    init_pair(10, COLOR_BLUE, COLOR_WHITE);
+    init_pair(11, COLOR_RED, COLOR_BLACK);
+    init_pair(12, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(13, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(14, COLOR_WHITE, COLOR_BLACK);
+    init_pair(15, COLOR_GREEN, COLOR_BLACK);
+    init_pair(16, COLOR_WHITE, COLOR_BLACK);
+    init_pair(17, COLOR_BLACK, COLOR_WHITE);
+    init_pair(18, COLOR_WHITE, COLOR_BLACK);
 }
 
 /**
@@ -199,14 +182,13 @@ int Arcade::ncurses::_getColor(Arcade::Color color)
 */
 void Arcade::ncurses::drawCircle(const std::shared_ptr<Arcade::Object> object)
 {
-    int color = _getColor(object->getColor());
+    int color = object->getColor();
     int x = object->getPosition().getX() * SQUARE_WIDTH;
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
-    int radius = OBJECT_SIZE / 2;
 
     attron(COLOR_PAIR(color));
-    for (int i = 0; i < radius * SQUARE_WIDTH; i++) {
-        for (int j = 0; j < radius * SQUARE_HEIGHT; j++) {
+    for (int i = 0; i < SQUARE_WIDTH; i++) {
+        for (int j = 0; j < SQUARE_HEIGHT; j++) {
                 mvprintw(y + j, x + i, " ");
             }
     }
@@ -220,13 +202,13 @@ void Arcade::ncurses::drawCircle(const std::shared_ptr<Arcade::Object> object)
 */
 void Arcade::ncurses::drawRectangle(const std::shared_ptr<Arcade::Object> object)
 {
-    int color = _getColor(object->getColor());
+    int color = object->getColor();
     int x = object->getPosition().getX() * SQUARE_WIDTH;
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
 
     attron(COLOR_PAIR(color));
-    for (int i = 0; i < OBJECT_SIZE / 2 * SQUARE_WIDTH; i++) {
-        for (int j = 0; j < OBJECT_SIZE / 2 * SQUARE_HEIGHT; j++) {
+    for (int i = 0; i < SQUARE_WIDTH; i++) {
+        for (int j = 0; j < SQUARE_HEIGHT; j++) {
             mvprintw(y + j, x + i, " ");
         }
     }
@@ -240,14 +222,14 @@ void Arcade::ncurses::drawRectangle(const std::shared_ptr<Arcade::Object> object
 */
 void Arcade::ncurses::drawText(const std::shared_ptr<Arcade::Object> object)
 {
-    int color = _getColor(object->getColor());
+    int color = object->getColor();
     int x = object->getPosition().getX() * SQUARE_WIDTH;
     int y = object->getPosition().getY() * SQUARE_HEIGHT;
     std::string text = object->getAsset();  
 
-    attron(COLOR_PAIR(color));
+    attron(COLOR_PAIR(10 + color));
     mvprintw(y, x, "%s", text.c_str());
-    attroff(COLOR_PAIR(color));
+    attroff(COLOR_PAIR(10 + color));
 }
 
 extern "C" Arcade::ncurses *entryPointDisplay()

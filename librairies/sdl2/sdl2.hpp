@@ -11,7 +11,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 #include <vector>
 #define OBJECT_SIZE 40
@@ -38,7 +38,7 @@ namespace Arcade {
 
     public:
         sdl2();
-        ~sdl2();
+        ~sdl2() override;
         void clearWindow() override;
         void updateWindow() override;
         void draw(std::shared_ptr<Arcade::Object> object) override;
@@ -46,9 +46,9 @@ namespace Arcade {
         int playTurn() override;
 
     private:
-        SDL_Window *_window;
-        SDL_Renderer *_renderer;
-        SDL_Surface *_surface;
+        SDL_Window *_window = nullptr;
+        SDL_Renderer *_renderer = nullptr;
+        SDL_Surface *_surface = nullptr;
         std::vector<std::pair<std::string, SDL_Texture *>> _textures;
         clock_t _clock;
         ColorRGBA _getColor(Arcade::Color color);
@@ -56,6 +56,7 @@ namespace Arcade {
         void drawCircle(const std::shared_ptr<Arcade::Object> object) override;
         void drawRectangle(const std::shared_ptr<Arcade::Object> object) override;
         void drawText(const std::shared_ptr<Arcade::Object> object) override;
+        void deleteSdl();
     };
 }
 

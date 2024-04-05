@@ -79,25 +79,22 @@ const std::vector<std::pair<int, Arcade::Event>> keyEvents = {
 Arcade::sdl2::sdl2()
 {
     TTF_Init();
-    //TODO : Throw errors instead of exit
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        exit(84);
-    }
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+        throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
     _window = SDL_CreateWindow("Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, SDL_WINDOW_SHOWN);
     if (_window == nullptr) {
-        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-        exit(84);
+        SDL_Quit();
+        throw std::runtime_error("SDL_CreateWindow Error: " + std::string(SDL_GetError()));
     }
     _surface = SDL_GetWindowSurface(_window);
     if (_surface == nullptr) {
-        std::cerr << "SDL_GetWindowSurface Error: " << SDL_GetError() << std::endl;
-        exit(84);
+        deleteSdl();
+        throw std::runtime_error("SDL_GetWindowSurface Error: " + std::string(SDL_GetError()));
     }
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
     if (_renderer == nullptr) {
-        std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-        exit(84);
+        deleteSdl();
+        throw std::runtime_error("SDL_CreateRenderer Error: " + std::string(SDL_GetError()));
     }
     _clock = clock();
 }
@@ -108,11 +105,23 @@ Arcade::sdl2::sdl2()
  */
 Arcade::sdl2::~sdl2()
 {
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
+    deleteSdl();
+}
+
+/**
+ * @brief Delete sdl component
+ */
+void Arcade::sdl2::deleteSdl()
+{
+    if (_renderer)
+        SDL_DestroyRenderer(_renderer);
+    if (_window)
+        SDL_DestroyWindow(_window);
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
+//    for (auto &texture : _textures)
+//        SDL_DestroyTexture(texture.second);
     _textures.clear();
 }
 
@@ -180,11 +189,11 @@ Arcade::Event Arcade::sdl2::getInput()
 int Arcade::sdl2::playTurn()
 {
     clock_t new_clock = clock();
-    int time = (new_clock - _clock) / CLOCKS_PER_SEC;
+    long time = (new_clock - _clock) / CLOCKS_PER_SEC;
 
-    if (time >= 1) {
+    if (time >= 0.4l) {
         _clock = new_clock;
-        return time;
+        return static_cast<int>(time / 0.4l);
     }
     return 0;
 }
@@ -198,7 +207,7 @@ int Arcade::sdl2::playTurn()
 */
 bool Arcade::sdl2::_loadTexture(const std::string &path)
 {
-    if (_textures.size() > 0) {
+    if (!_textures.empty()) {
         for (auto &texture : _textures) {
             if (texture.first == path)
                 return true;
@@ -208,7 +217,7 @@ bool Arcade::sdl2::_loadTexture(const std::string &path)
     if (texture == nullptr) {
         return false;
     }
-    _textures.push_back(std::make_pair(path, texture));
+    _textures.emplace_back(path, texture);
     return true;
 }
 
@@ -273,10 +282,10 @@ void Arcade::sdl2::drawRectangle(const std::shared_ptr<Arcade::Object> object)
     SDL_Rect rect = {x, y, OBJECT_SIZE, OBJECT_SIZE};
     ColorRGBA color = _getColor(object->getColor());
 
-    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && _loadTexture(object->getAsset().c_str())) {
+    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && _loadTexture(object->getAsset())) {
         for (auto &texture : _textures) {
             if (texture.first == object->getAsset())
-                SDL_RenderCopy(_renderer, texture.second, NULL, &rect);
+                SDL_RenderCopy(_renderer, texture.second, nullptr, &rect);
         }
     } else {
         SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
@@ -300,7 +309,7 @@ void Arcade::sdl2::drawText(const std::shared_ptr<Arcade::Object> object)
     SDL_Rect rect = {object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE, surface->w, surface->h};
 
     if (!font || !surface || !texture)
-        return;
+        throw std::runtime_error("SDL Error: " + std::string(SDL_GetError()));
     SDL_RenderCopy(_renderer, texture, NULL, &rect);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);

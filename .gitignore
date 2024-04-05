@@ -36,3 +36,6 @@ arcade
 lib/
 build/
 cmake-build-debug/
+log*
+vgcore*
+.scores

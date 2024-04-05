@@ -67,6 +67,7 @@ const std::vector<std::pair<sf::Keyboard::Key, Arcade::Event>> keyEvents = {
 */
 Arcade::sfml::sfml() : _window(sf::VideoMode(1920, 1080), "Arcade")
 {
+    _window.setFramerateLimit(40);
     _clock = sf::Clock();
 }
 
@@ -188,9 +189,15 @@ void Arcade::sfml::drawCircle(const std::shared_ptr<Arcade::Object> object)
     sf::Texture texture;
 
     circle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
-    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
+
+
+    if (object->assetIsSet() && _textures.find(object->getAsset()) != _textures.end())
+        circle.setTexture(&_textures[object->getAsset()]);
+    else if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset())) {
         circle.setTexture(&texture);
-    else
+        _textures[object->getAsset()] = texture;
+    }
+    if (circle.getTexture() == nullptr)
         circle.setFillColor(_getColor(object->getColor()));
     _window.draw(circle);
 }
@@ -209,9 +216,16 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
     sf::Texture texture;
 
     rectangle.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
-    if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset()))
+
+    if (object->assetIsSet() && _textures.find(object->getAsset()) != _textures.end())
+        rectangle.setTexture(&_textures[object->getAsset()]);
+    else if (object->assetIsSet() && access(object->getAsset().c_str(), F_OK) != -1 && texture.loadFromFile(object->getAsset())) {
         rectangle.setTexture(&texture);
+        _textures[object->getAsset()] = texture;
+    }
     else
+        rectangle.setFillColor(_getColor(object->getColor()));
+    if (rectangle.getTexture() == nullptr)
         rectangle.setFillColor(_getColor(object->getColor()));
     _window.draw(rectangle);
 }
@@ -224,11 +238,12 @@ void Arcade::sfml::drawRectangle(const std::shared_ptr<Arcade::Object> object)
 void Arcade::sfml::drawText(const std::shared_ptr<Arcade::Object> object)
 {
     sf::Text text;
-    sf::Font font;
 
-    if (!font.loadFromFile("librairies/assets/arial.ttf"))
+    if (!_fontLoaded)
+        _fontLoaded = _font.loadFromFile("librairies/assets/arial.ttf");
+    if (!_fontLoaded)
         return;
-    text.setFont(font);
+    text.setFont(_font);
     text.setString(object->getAsset());
     text.setFillColor(_getColor(object->getColor()));
     text.setPosition(object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE);
