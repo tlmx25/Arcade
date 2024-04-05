@@ -23,7 +23,6 @@ class snake : public Arcade::IGame {
             std::vector<std::shared_ptr<Arcade::Object>> get_snake();
             void set_direction(Arcade::Event direction);
             Arcade::Event get_direction();
-            Arcade::Color get_random_color();
         private:
             std::vector<std::shared_ptr<Arcade::Object>> _snake;
             std::vector<Arcade::Event> _directions;
