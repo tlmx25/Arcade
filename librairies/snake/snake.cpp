@@ -93,7 +93,7 @@ bool snake::Player::is_dead()
         }
     }
 
-    if (_snake[size]->getPosition().getX() < 8 || _snake[size]->getPosition().getX() > 40 || _snake[size]->getPosition().getY() < 1 || _snake[size]->getPosition().getY() > 23) {
+    if (_snake[size]->getPosition().getX() < 9 || _snake[size]->getPosition().getX() > 39 || _snake[size]->getPosition().getY() < 2 || _snake[size]->getPosition().getY() > 22) {
         return true;
     }
     return false;
