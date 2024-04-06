@@ -141,11 +141,11 @@ Arcade::Event Arcade::ncurses::getInput()
 int Arcade::ncurses::playTurn()
 {
     clock_t new_clock = clock();
-    int time = (new_clock - _clock) / CLOCKS_PER_SEC;
+    int time = (new_clock - _clock) / 500000;
 
-    if (time >= 0.8f) {
+    if (time >= 0.6f) {
         _clock = new_clock;
-        return time / 0.8f;
+        return time / 0.6f;
     }
     return 0;
 }

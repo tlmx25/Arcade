@@ -189,11 +189,11 @@ Arcade::Event Arcade::sdl2::getInput()
 int Arcade::sdl2::playTurn()
 {
     clock_t new_clock = clock();
-    long time = (new_clock - _clock) / CLOCKS_PER_SEC;
+    long time = (new_clock - _clock) / 500000;
 
-    if (time >= 0.4l) {
+    if (time >= 0.6l) {
         _clock = new_clock;
-        return static_cast<int>(time / 0.4l);
+        return static_cast<int>(time / 0.6l);
     }
     return 0;
 }

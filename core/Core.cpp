@@ -163,7 +163,7 @@ std::vector<std::shared_ptr<Arcade::Object>> Core::menu()
     int x = 5;
     for (auto &game : _gamesList) {
         objects.push_back(std::make_shared<Arcade::Object>(x,2, Arcade::Type::Text, (game == _selectedGame) ? Arcade::Color::GREEN : Arcade::Color::WHITE, getLibName(game)));
-        x += 5;
+        x += 8;
     }
     objects.push_back(std::make_shared<Arcade::Object>(1,3, Arcade::Type::Text, Arcade::Color::WHITE, "Graphics:"));
     x = 5;
