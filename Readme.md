@@ -8,25 +8,13 @@ Pour compiler le projet, vous devez exécuter le script `build.sh` à la racine 
 ./build.sh
 ```
 
-Pour compiler le projet, vous devez exécuter le script `build.sh` à la racine du projet. Ce script se charge de créer un répertoire de build, d'exécuter CMake pour générer les fichiers de build et de construire le projet avec make.
-
-```bash
-./build.sh
-```
-
 Une fois la compilation terminée, vous pouvez lancer le jeu en utilisant l'exécutable `arcade` généré. Vous devez fournir le chemin vers une des bibliothèques graphiques disponibles en argument. Par exemple, pour lancer le jeu avec la bibliothèque SFML, vous pouvez utiliser la commande suivante :
 
 ```bash
 ./arcade lib/lib_arcade_sfml.so
 ```
 
-Une fois la compilation terminée, vous pouvez lancer le jeu en utilisant l'exécutable `arcade` généré. Vous devez fournir le chemin d'une des bibliothèques graphiques disponibles en argument. Par exemple, pour lancer le jeu avec la bibliothèque SFML, vous pouvez utiliser la commande suivante :
-
-```bash
-./arcade lib/lib_arcade_sfml.so
-```
-
-Remplacez `lib/lib_arcade_sfml.so` par le chemin vers la bibliothèque graphique que vous souhaitez utiliser. Les bibliothèques graphiques disponibles sont `lib_arcade_sfml.so`, `lib_arcade_ncurses.so` et `lib_arcade_sdl2.so`.
+Remplacez `lib/lib_arcade_sfml.so` par le chemin vers la bibliothèque graphique que vous souhaitez utiliser. Les bibliothèques graphiques disponibles sont `lib_arcade_sfml.so`, `lib_arcade_ncurses.so` et `lib_arcade_sdl2.so` (ou tout autre librairies implentant l'interface IDisplay).
 
 Veuillez noter que le chemin vers la bibliothèque graphique peut varier en fonction de l'endroit où vous exécutez la commande.
 ___
