@@ -89,7 +89,6 @@ void nibbler::initMap(int level)
     int y = 2;
 
     std::string path = "librairies/assets/nibbler/map" + std::to_string(level) + ".txt";
-    std::cout << path << std::endl;
     std::ifstream file(path);
 
     if (!file) {
@@ -488,7 +487,6 @@ void nibbler::createObects()
 
 std::vector<std::shared_ptr<Arcade::Object>> nibbler::Turn(Arcade::Event event)
 {
-    std::cout << "Nibbler event" << event << std::endl;
     if (game_over == 2 && event == Arcade::Event::ENTER) {
         _map.clear();
         _apples.clear();
