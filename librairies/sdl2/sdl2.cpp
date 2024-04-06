@@ -113,8 +113,6 @@ Arcade::sdl2::~sdl2()
  */
 void Arcade::sdl2::deleteSdl()
 {
-    if (_surface)
-        SDL_FreeSurface(_surface);
     if (_renderer)
         SDL_DestroyRenderer(_renderer);
     if (_window)
@@ -122,8 +120,8 @@ void Arcade::sdl2::deleteSdl()
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
-    for (auto &texture : _textures)
-        SDL_DestroyTexture(texture.second);
+//    for (auto &texture : _textures)
+//        SDL_DestroyTexture(texture.second);
     _textures.clear();
 }
 
@@ -191,11 +189,11 @@ Arcade::Event Arcade::sdl2::getInput()
 int Arcade::sdl2::playTurn()
 {
     clock_t new_clock = clock();
-    long time = (new_clock - _clock) / CLOCKS_PER_SEC;
+    long time = (new_clock - _clock) / 500000;
 
-    if (time >= 0.4l) {
+    if (time >= 0.6l) {
         _clock = new_clock;
-        return static_cast<int>(time / 0.4l);
+        return static_cast<int>(time / 0.6l);
     }
     return 0;
 }

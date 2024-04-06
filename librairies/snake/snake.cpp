@@ -83,7 +83,7 @@ bool snake::Player::is_dead()
         }
     }
 
-    if (_snake[size]->getPosition().getX() < 8 || _snake[size]->getPosition().getX() > 40 || _snake[size]->getPosition().getY() < 1 || _snake[size]->getPosition().getY() > 23) {
+    if (_snake[size]->getPosition().getX() < 9 || _snake[size]->getPosition().getX() > 39 || _snake[size]->getPosition().getY() < 2 || _snake[size]->getPosition().getY() > 22) {
         return true;
     }
     return false;
@@ -321,10 +321,10 @@ void snake::_initMap()
         std::vector<std::shared_ptr<Arcade::Object>> line;
         for (int j = 9 ; j < 40 ; j++) {
             if (j % 2 == color) {
-                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::GREEN,
+                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::WHITE,
                                                                 "librairies/assets/snake/grass.png"));
             } else {
-                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::BLUE,
+                line.push_back(std::make_shared<Arcade::Object>(j , i , Arcade::Type::Rectangle, Arcade::Color::WHITE,
                                                                 "librairies/assets/snake/grass2.png"));
             }
         }
@@ -350,9 +350,10 @@ void snake::createObects()
 
 std::vector<std::shared_ptr<Arcade::Object>> snake::Turn(Arcade::Event event)
 {
-    if (game_over == 1 && event != Arcade::Event::NEXT_GAME) {
+    if (game_over == 1 && event != Arcade::Event::GAME_RESTART) {
         return this->_objects;
     }
+    game_over = 0;
     this->_objects.clear();
     this->_snake_player.set_direction(event);
     if (this->_snake_player.moove_player() == 1) {
