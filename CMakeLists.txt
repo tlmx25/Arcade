@@ -23,7 +23,7 @@ add_subdirectory(librairies/sfml)
 add_subdirectory(librairies/ncurses)
 add_subdirectory(librairies/sdl2)
 add_subdirectory(librairies/snake)
-
+add_subdirectory(librairies/nibbler)
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "lib")
 
 add_custom_command(TARGET arcade POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
