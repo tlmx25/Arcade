@@ -304,12 +304,17 @@ void Arcade::sdl2::drawText(const std::shared_ptr<Arcade::Object> object)
     TTF_Font *font = TTF_OpenFont("librairies/assets/arial.ttf", 24);
     ColorRGBA color = _getColor(object->getColor());
     SDL_Color sdlColor = {color.r, color.g, color.b, color.a};
-    SDL_Surface *surface = TTF_RenderText_Solid(font, object->getAsset().c_str(), sdlColor);
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, surface);
-    SDL_Rect rect = {object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE, surface->w, surface->h};
 
-    if (!font || !surface || !texture)
+    if (!font)
         throw std::runtime_error("SDL Error: " + std::string(SDL_GetError()));
+    SDL_Surface *surface = TTF_RenderText_Solid(font, object->getAsset().c_str(), sdlColor);
+
+    if (!surface)
+        throw std::runtime_error("SDL Error: " + std::string(SDL_GetError()));
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, surface);
+    if (!texture)
+        throw std::runtime_error("SDL Error: " + std::string(SDL_GetError()));
+    SDL_Rect rect = {object->getPosition().getX() * OBJECT_SIZE, object->getPosition().getY() * OBJECT_SIZE, surface->w, surface->h};
     SDL_RenderCopy(_renderer, texture, NULL, &rect);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
