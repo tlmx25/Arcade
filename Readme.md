@@ -1,4 +1,35 @@
 # ARCADE
+___
+## Compilation et exécution
+
+Pour compiler le projet, vous devez exécuter le script `build.sh` à la racine du projet. Ce script se charge de créer le répertoire de build si nécessaire, d'exécuter CMake pour générer les fichiers de build, et enfin de lancer la commande `make` pour compiler le projet.
+
+```bash
+./build.sh
+```
+
+Pour compiler le projet, vous devez exécuter le script `build.sh` à la racine du projet. Ce script se charge de créer un répertoire de build, d'exécuter CMake pour générer les fichiers de build et de construire le projet avec make.
+
+```bash
+./build.sh
+```
+
+Une fois la compilation terminée, vous pouvez lancer le jeu en utilisant l'exécutable `arcade` généré. Vous devez fournir le chemin vers une des bibliothèques graphiques disponibles en argument. Par exemple, pour lancer le jeu avec la bibliothèque SFML, vous pouvez utiliser la commande suivante :
+
+```bash
+./arcade lib/lib_arcade_sfml.so
+```
+
+Une fois la compilation terminée, vous pouvez lancer le jeu en utilisant l'exécutable `arcade` généré. Vous devez fournir le chemin d'une des bibliothèques graphiques disponibles en argument. Par exemple, pour lancer le jeu avec la bibliothèque SFML, vous pouvez utiliser la commande suivante :
+
+```bash
+./arcade lib/lib_arcade_sfml.so
+```
+
+Remplacez `lib/lib_arcade_sfml.so` par le chemin vers la bibliothèque graphique que vous souhaitez utiliser. Les bibliothèques graphiques disponibles sont `lib_arcade_sfml.so`, `lib_arcade_ncurses.so` et `lib_arcade_sdl2.so`.
+
+Veuillez noter que le chemin vers la bibliothèque graphique peut varier en fonction de l'endroit où vous exécutez la commande.
+___
 ## Commandes de jeu
 
 Voici un tableau qui résume les commandes du jeu et l'action associée à chaque touche :
@@ -23,18 +54,18 @@ Voici un tableau qui résume les commandes du jeu et l'action associée à chaqu
 
 Veuillez noter que ces commandes peuvent varier en fonction de la configuration de la librairie utilisée.
 Les commande ici présente sont valable uniquement pour les librairies fournie avec le projet.
-
+___
 ## Jeux disponibles
 
 - Snake
 - Nibbler
-
+___
 ## Bibliothèques graphiques disponibles
 
 - SFML
 - NCurses
 - SDL2
-
+___
 ## Contributeurs
 | Nom du contributeur   | Rôle du contributeur | github du contributeur                             |
 |-----------------------| --- |----------------------------------------------------|
