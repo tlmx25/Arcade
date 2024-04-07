@@ -142,7 +142,7 @@ int nibbler::getScore()
     return _scoreNumber;
 }
 
-Arcade::Event nibbler::Player::is_colliding(int x, int y, std::vector<std::vector<std::shared_ptr<Arcade::Object>>> map, std::shared_ptr<Arcade::Object> obj)
+Arcade::Event nibbler::Player::is_colliding(int x, int y, std::vector<std::vector<std::shared_ptr<Arcade::Object>>> map)
 {
     size_t size = _snake.size() - 1;
     int xtmp = _snake[size]->getPosition().getX() - x;
@@ -205,7 +205,10 @@ bool nibbler::Player::side_colide(int x, int y, std::vector<std::vector<std::sha
 }
 
 int nibbler::Player::moove_player(std::vector<std::vector<std::shared_ptr<Arcade::Object>>> map) {
-    int x, y, x_tmp, y_tmp = 0;
+    int x = 0;
+    int y = 0;
+    int x_tmp = 0;
+    int y_tmp = 0;
     bool check = false;
     bool is_collide = false;
     std::shared_ptr<Arcade::Object> tmp;
@@ -218,7 +221,7 @@ int nibbler::Player::moove_player(std::vector<std::vector<std::shared_ptr<Arcade
                 x = _snake[i]->getPosition().getX();
                 y = _snake[i]->getPosition().getY();
                 if (_directions[i] == Arcade::GAME_UP) {
-                    direction = is_colliding(x, y - 1, map, _snake[i]);
+                    direction = is_colliding(x, y - 1, map);
                     if (direction != Arcade::NONE) {
                         set_direction(direction);
                         is_collide = true;
@@ -227,7 +230,7 @@ int nibbler::Player::moove_player(std::vector<std::vector<std::shared_ptr<Arcade
                     _snake[i]->setAsset("librairies/assets/nibbler/green/head.png");
                     _snake[i]->setPosition(x, y - 1);
                 } else if (_directions[i] == Arcade::GAME_DOWN) {
-                    direction = is_colliding(x, y + 1, map, _snake[i]);
+                    direction = is_colliding(x, y + 1, map);
                     if (direction != Arcade::NONE) {
                         set_direction(direction);
                         is_collide = true;
@@ -236,7 +239,7 @@ int nibbler::Player::moove_player(std::vector<std::vector<std::shared_ptr<Arcade
                     _snake[i]->setAsset("librairies/assets/nibbler/green/head_down.png");
                     _snake[i]->setPosition(x, y + 1);
                 } else if (_directions[i] == Arcade::GAME_LEFT) {
-                    direction = is_colliding(x - 1, y, map, _snake[i]);
+                    direction = is_colliding(x - 1, y, map);
                     if (direction != Arcade::NONE) {
                         set_direction(direction);
                         is_collide = true;
@@ -245,7 +248,7 @@ int nibbler::Player::moove_player(std::vector<std::vector<std::shared_ptr<Arcade
                     _snake[i]->setAsset("librairies/assets/nibbler/green/head_left.png");
                     _snake[i]->setPosition(x - 1, y);
                 } else {
-                    direction = is_colliding(x + 1, y, map, _snake[i]);
+                    direction = is_colliding(x + 1, y, map);
                     if (direction != Arcade::NONE) {
                         set_direction(direction);
                         is_collide = true;
@@ -498,6 +501,7 @@ std::vector<std::shared_ptr<Arcade::Object>> nibbler::Turn(Arcade::Event event)
             game_over = 1;
             level = 0;
             initMap(level);
+            _player = Player();
             return this->_objects;
         }
         initMap(level);
@@ -523,6 +527,7 @@ std::vector<std::shared_ptr<Arcade::Object>> nibbler::Turn(Arcade::Event event)
         this->_objects.push_back(std::make_shared<Arcade::Object>(21, 12, Arcade::Type::Text, Arcade::Color::RED, "Score : " + std::to_string(_scoreNumber)));
         _scoreNumber = 0;
         game_over = 1;
+        level = 0;
         return this->_objects;
     }
     if (he_win()) {

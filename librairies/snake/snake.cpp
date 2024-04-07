@@ -97,7 +97,10 @@ bool snake::Player::he_win()
 }
 int snake::Player::moove_player()
 {
-    int x, y, x_tmp, y_tmp = 0;
+    int x = 0;
+    int y = 0;
+    int x_tmp = 0;
+    int y_tmp = 0;
     bool check = false;
     std::shared_ptr<Arcade::Object> tmp;
     std::vector<Arcade::Event> _tmp_directions = _directions;
