@@ -21,7 +21,7 @@ class nibbler : public Arcade::IGame{
             int moove_player(std::vector<std::vector<std::shared_ptr<Arcade::Object>>> map);
             bool is_eating(std::vector<std::shared_ptr<Arcade::Object>> *apples);
             bool is_dead();
-            Arcade::Event is_colliding(int x, int y, std::vector<std::vector<std::shared_ptr<Arcade::Object>>> map, std::shared_ptr<Arcade::Object> obj);
+            Arcade::Event is_colliding(int x, int y, std::vector<std::vector<std::shared_ptr<Arcade::Object>>> map);
             bool side_colide(int x, int y, std::vector<std::vector<std::shared_ptr<Arcade::Object>>> map);
             void eat();
             std::vector<std::shared_ptr<Arcade::Object>> get_snake();
